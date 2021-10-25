@@ -22,7 +22,12 @@ const ExampleTasks = [{
     name: "Wash Dishes",
     color: "blue",
     assigned_to: "Pearl"
-    }];
+    },{
+        date: "28-10-2021",
+        name: "Toilet Break",
+        color: "blue",
+        assigned_to: "Audrey"
+        }];
 
 //Function which handles the deleting of items once myView is changed
 function deleteTableEntries(){
@@ -34,15 +39,22 @@ for (let i = 0; i<num_rows -1; i++){
 }
 
 //Function which handles the adding of Cells to a Table
-function createCell(cell, text, style) {
+function createCell(cell, text, style, EngineerName, iterator) {
+    /*
+    cell -> html cell object
+    text -> string -> text of which to populate the cell
+    style -> string -> css class name
+    EngineerName -> string -> required for cell identifier
+    iterator -> integer -> required for cell identifier
+    */
     var div = document.createElement('div'), // create DIV element
-        txt = document.createTextNode(text); // create text node
+    txt = document.createTextNode(text); // create text node
     div.appendChild(txt);                    // append text node to the DIV
     div.setAttribute('class', style);        // set DIV class attribute
     div.setAttribute('className', style);    // set DIV class attribute for IE (?!)
+    div.setAttribute('id', EngineerName+iterator);
     div.setAttribute('ondrop', 'onDrop(event)');
     div.setAttribute('ondragover', 'onDragOver(event)');
-    console.log(div);
     cell.appendChild(div);                   // append DIV to the table cell
 }
 
@@ -58,10 +70,10 @@ function appendRow(Task) {
     // insert table cells to the new row
     for (i = 0; i < tbl.rows[0].cells.length; i++) {
         if (i==0){
-            createCell(row.insertCell(i), EngineerName, 'row');
+            createCell(row.insertCell(i), EngineerName, 'row', EngineerName, '');
         }else{
-            if(i == ID){createCell(row.insertCell(i), taskName, 'test');}
-            else{createCell(row.insertCell(i), '','empty');}
+            if(i == ID){createCell(row.insertCell(i), taskName, 'test', EngineerName, i);}
+            else{createCell(row.insertCell(i), '', 'empty', EngineerName, i);}
         }
         
     }
@@ -146,8 +158,11 @@ function onDrop(event){
     const draggableElement = document.getElementById(id);
     //Get our target
     const dropzone = event.target;
+    //Check our target is not another draggable item
+    if(dropzone.className != "item"){
     //Put our draggable div into the dropzone
     dropzone.appendChild(draggableElement);
+    }
     //Reset our data Object
     event
     .dataTransfer.clearData();
