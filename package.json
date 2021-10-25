@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "moment": "^2.29.1",
+    "nodemon": "^2.0.14"
+  },
+  "name": "myscheduler",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "main.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

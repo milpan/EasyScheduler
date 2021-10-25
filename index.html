@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyScheduler Example</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/solid.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+<script src="node_modules/moment/moment.js"></script>
+</head>
+<body>
+    <div class="itembox">
+        <div class="dropzone" ondragover="onDragOver(event);" ondrop="onDrop(event);">
+        <div class="origin">
+            <h1>Tasks</h1>
+        <div id="draggable-1" class="item" draggable="true" ondragstart="onDragStart(event);">
+            Clean the Car
+        </div>
+        <div id="draggable-2" class="item" draggable="true" ondragstart="onDragStart(event);">
+            Mow the Lawn
+        </div>
+    </div>
+    </div>
+    </div>
+    <br>
+    <div class="container">
+        <div class="Scheduler">
+        <div class="dateheader">
+            <i class="fas fa-angle-left prev"></i>
+            <div class="CurrentDate">
+                <a></a>
+            </div>
+            <i class="fas fa-angle-right next"></i>
+        </div>
+        <table class="myView" id="myView">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Mon</th>
+                    <th>Tue</th>
+                    <th>Wed</th>
+                    <th>Thu</th>
+                    <th>Fri</th>
+                    <th>Sat</th>
+                    <th>Sun</th>
+                    <th>Mon</th>
+                    <th>Tue</th>
+                    <th>Wed</th>
+                    <th>Thu</th>
+                    <th>Fri</th>
+                    <th>Sat</th>
+                    <th>Sun</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+
+            
+        </table>
+    </div>
+    </div>
+    <script src="main.js"></script>
+    <div class="tooltip">Example made by Matthew Bromley</div>
+</body>
+
+</html>
