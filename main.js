@@ -1,4 +1,5 @@
 
+//import './tools/tabledesign.js';
 
 moment.locale();
 const init_date = moment();
@@ -11,7 +12,7 @@ const Months = ['January', 'Feburary',
 
 const Engineers = [];
 
-//Build an example task
+//Build some example tasks
 const ExampleTasks = [{
     date: "27-10-2021",
     name: "Test Task",
@@ -23,15 +24,15 @@ const ExampleTasks = [{
     color: "blue",
     assigned_to: "Pearl"
     },{
-        date: "28-10-2021",
-        name: "Toilet Break",
-        color: "blue",
-        assigned_to: "Audrey"
-        }];
+    date: "28-10-2021",
+    name: "Toilet Break",
+    color: "blue",
+    assigned_to: "Audrey"
+    }];
 
 //Function which handles the deleting of items once myView is changed
 function deleteTableEntries(){
-var tbl = document.getElementById('myView')
+var tbl = document.getElementById('myView');
 var num_rows = tbl.rows.length;
 for (let i = 0; i<num_rows -1; i++){
     tbl.deleteRow(-1);
@@ -176,6 +177,7 @@ startScheduler();
 function startScheduler(){
     renderTask(ExampleTasks);
     setCalendarDate(date);
+    start_resize_grid();
 }
 
 
