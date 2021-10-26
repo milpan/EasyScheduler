@@ -4,7 +4,7 @@
 }
 
 .container{
-width: 100%;
+width: auto;
 justify-content: center;
 align-items: center;
 }
@@ -12,7 +12,10 @@ align-items: center;
 .dropzone{
     flex-basis: 100%;
     flex-grow: 1;
+    border-radius: 2px;
 }
+
+
 
 .test{
 background-color: blue;
@@ -22,10 +25,9 @@ width: auto;
 
 .Scheduler{
     overflow-x: scroll;
-    width: "98%";
+    width: auto;
     box-shadow: 0 0.2rem 1rem rgba(0,0,0,0.4) ;
     height: "40%";
-    background-color: blanchedalmond;
 }
 
 .item a{
@@ -34,9 +36,11 @@ width: auto;
 /* In order for the drag and drop example pane*/
 .itembox{
     border: 2px solid black;
-    background-color: grey;
+    background-color: lightgrey;
     display: flex;
     justify-content: left;
+    padding: 10px;
+    border-radius: 25px;
 }
 
 .origin{
@@ -64,7 +68,7 @@ width: auto;
 }
 
 .dropzone{
-background-color: green;
+    background-color: inherit;
 flex-basis: 100%;
 flex-grow: 1;
 padding: 10px;
@@ -109,6 +113,7 @@ text-align: center;
 .myView th{
 border-left: 1px solid black;
 }
+
 .myView td{
     width: auto;
     border-left: 1px solid black;

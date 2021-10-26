@@ -5,13 +5,13 @@ This script manages rendering resizable table columns
 function start_resize_grid(){
     //Get the table in question
     var tbl = document.getElementById('myView');
-    console.log("Starting Resizable Column Code");
     resizable_Table(tbl);
 }
 
 function resizable_Table(table){
     var row = table.getElementsByTagName('tr')[0],
     cols = row ? row.children : undefined;
+    table.style.overflow = 'scroll';
     if (!cols) return;
     for (var i=0; i<1; i++){
         var div = createScaleableDiv(table.offsetHeight);
@@ -26,7 +26,7 @@ function createScaleableDiv(height){
 var div = document.createElement('div');
 div.style.top = 0;
 div.style.right = 0;
-div.style.width = '2px';
+div.style.width = '1px';
 div.style.position = 'absolute';
 div.style.cursor = 'col-resize';
 div.style.backgroundColor = 'slategray';
@@ -48,12 +48,21 @@ if(nxtCol)
 });
 document.addEventListener('mousemove', function(e) {
 if(curCol){
+
     var diffX = e.pageX - pageX;
-    if(nxtCol)
-    nxtCol.style.width = (nxtColWidth - (diffX)) + 'px';
-    curCol.style.width = (curColWidth + diffX) + 'px';
+    if(nxtCol){
+        if(nxtColWidth > 30){
+            //nxtCol.style.width = (nxtColWidth - (diffX)) + 'px';
+            curCol.style.width = (curColWidth + diffX) + 'px';
+        }else{
+            nxtCol.style.width = 70 + 'px';
+            //curCol.style.width = curColWidth + 'px';
+        }
+
+    }
 }
 });
+//Reset the variables once the mouse is lifted
 document.addEventListener('mouseup', function(e){
 curCol = undefined;
 nxtCol = undefined;
