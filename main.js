@@ -15,7 +15,7 @@ const Engineers = [];
 //Build some example tasks
 const ExampleTasks = [{
     date: "27-10-2021",
-    name: "Test Task",
+    name: "Prerender Test Task",
     color: "blue",
     assigned_to: "Fred"
     },{
@@ -136,15 +136,8 @@ function onDragStart(event){
     .dataTransfer
     .setData('text/plain', event.target.id);
     //Also set the background colour of the dragged item
-    event
-    .currentTarget
-    .style
-    .backgroundColor = 'yellow';
     //and the text to black
-    event
-    .currentTarget
-    .style
-    .color = 'black';
+    event.currentTarget.style.color = 'white';
 }
 
 function onDragOver(event){
@@ -161,6 +154,8 @@ function onDrop(event){
     const dropzone = event.target;
     //Check our target is not another draggable item
     if(dropzone.className != "item"){
+    //Call the function to handle storing dragged tasks 
+    class_to_date(dropzone.id, draggableElement.innerHTML);
     //Put our draggable div into the dropzone
     dropzone.appendChild(draggableElement);
     }

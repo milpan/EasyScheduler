@@ -18,7 +18,8 @@ align-items: center;
 
 
 .test{
-background-color: blue;
+    background: rgb(4,4,168);
+    background: linear-gradient(0deg, rgba(4,4,168,1) 0%, rgba(0,89,255,1) 100%);
 color: white;
 width: auto;
 }
@@ -36,7 +37,7 @@ width: auto;
 /* In order for the drag and drop example pane*/
 .itembox{
     border: 2px solid black;
-    background-color: lightgrey;
+    background-color: dimgray;
     display: flex;
     justify-content: left;
     padding: 10px;
@@ -44,9 +45,15 @@ width: auto;
 }
 
 .origin{
+    background-color: inherit;
     flex-basis: 100%;
     flex-grow: 1;
     padding: 10px;
+}
+
+.origin h1{
+    background-color: inherit;
+    color: white;
 }
 
 .tooltip{
@@ -60,8 +67,9 @@ width: auto;
 }
 
 .item{
-    background-color: yellow;
-    color: black;
+    background: rgb(4,4,168);
+    background: linear-gradient(0deg, rgba(4,4,168,1) 0%, rgba(0,89,255,1) 100%);
+    color: white;
     margin-top: 10px;
     margin-bottom: 10px;
     padding: 10px;
