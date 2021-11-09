@@ -7,13 +7,21 @@ function class_to_date(classIn, classText){
     //classIn -> class that user has dragged on to (for example) Fred1
     var id = classIn.match(/\d+/g);
     var user = classIn.match(/[a-zA-Z]+/g);
-    var refDate = moment(date);
+    refDate = moment(date);
     var taskDate = refDate.add(id, 'days');
+    var formattedtaskDate = taskDate.format('DD-MM-YYYY');
+    console.log(taskDate);
     ExampleTasks.push({
-        date: taskDate,
+        id: 4,
+        date: formattedtaskDate,
         name: classText,
         color: "blue",
         assigned_to: user
     })
-    
+}
+//This function is called when the item is dragged
+function remove_class(classIn, classText){
+    var id = classIn.match(/\d+/g);
+    var user = classIn.match(/[a-zA-Z]+/g);
+
 }

@@ -22,6 +22,9 @@ align-items: center;
     background: linear-gradient(0deg, rgba(4,4,168,1) 0%, rgba(0,89,255,1) 100%);
 color: white;
 width: auto;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
 }
 
 .Scheduler{
@@ -52,6 +55,8 @@ width: auto;
 }
 
 .origin h1{
+    vertical-align: top;
+    font-size: 14pt;
     background-color: inherit;
     color: white;
 }
@@ -70,6 +75,9 @@ width: auto;
     background: rgb(4,4,168);
     background: linear-gradient(0deg, rgba(4,4,168,1) 0%, rgba(0,89,255,1) 100%);
     color: white;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     margin-top: 10px;
     margin-bottom: 10px;
     padding: 10px;
@@ -90,10 +98,13 @@ flex-grow: 1;*/
 
 .dateheader{
 width: 100%;
+vertical-align: center;
+padding-top: 10px;
 display: flex;
 justify-content: space-between;
 color: white;
-background-color: seagreen !important;
+background: rgb(4,4,168);
+background: linear-gradient(0deg, rgba(4,4,168,1) 0%, rgba(0,89,255,1) 100%);
 text-shadow: 0 0.1rem 1rem rgb(0,0,0);
 align-content: center;
 justify-content: center;
@@ -101,12 +112,16 @@ text-align: center;
 }
 
 .CurrentDate a{
-    background-color: seagreen;
+    vertical-align: center;
+    background: rgb(4,4,168);
+    background: linear-gradient(0deg, rgba(4,4,168,1) 0%, rgba(0,89,255,1) 100%);
 }
 
 /* In order for the selection pane */
 .dateheader i {
-    background-color: seagreen !important;
+    vertical-align: center;
+    background: rgb(4,4,168);
+    background: linear-gradient(0deg, rgba(4,4,168,1) 0%, rgba(0,89,255,1) 100%);
     cursor: pointer;
 }
 
