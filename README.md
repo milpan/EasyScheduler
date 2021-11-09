@@ -1,4 +1,7 @@
 # EasyScheduler
+
+![EasyScheduler - An easy scheduling tool](./example.gif)
+
 Simple task scheduler built using Vanilla Javascript and HTML to assign tasks to certain users. Supports drag drop functionality of tasks onto the grid. 
 ## Features to Implement
 Month View and 7 Day View allowing users to easily select month and year instead of scrolling through the calendar.
