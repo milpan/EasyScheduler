@@ -5,7 +5,7 @@ moment.locale();
 const init_date = moment();
 const date = init_date.startOf('isoweek');
 //Number of days of the calendar you wish to display
-const n_days = 14;
+var n_days = 30;
 
 var ExampleTasks =[];
 var DistinctNames =[];
@@ -222,6 +222,24 @@ function init_button_listener(){
         date.add(n_days, 'days');
         start();
     });
+    document.querySelector('.day').addEventListener("click", ()=>{
+        n_days = 7;
+        deleteTableEntries(1);
+        start();
+        init_button_listener();
+    });
+    document.querySelector('.fortnight').addEventListener("click", ()=>{
+        n_days = 14;
+        deleteTableEntries(1);
+        start();
+        init_button_listener();
+    });
+    document.querySelector('.month').addEventListener("click", ()=>{
+        n_days = 31;
+        deleteTableEntries(1);
+        start();
+        init_button_listener();
+    });
     }
 //Function which pushes tasks to the Array once they have been dragged
 function save_class(RefClass, startDate, element){
@@ -273,13 +291,23 @@ function onDragStart(event){
 }
 
 //Function which handles the deleting of items once myView is changed
-function deleteTableEntries(){
-    var tbl = document.getElementById('myView');
-    var num_rows = tbl.rows.length;
-    for (let i = 0; i<num_rows -1; i++){
-        tbl.deleteRow(-1);
+function deleteTableEntries($condition = 0){
+    //$condition -> default=0 (removes everything but day row) -> 1 removes all
+    if($condition==0){
+        var tbl = document.getElementById('myView');
+        var num_rows = tbl.rows.length;
+        for (let i = 0; i<num_rows -1; i++){
+            tbl.deleteRow(-1);
+        }
+        countTasks = 0
+    } else{
+        var tbl = document.getElementById('myView');
+        var num_rows = tbl.rows.length;
+        for (let i = 0; i<num_rows; i++){
+            tbl.deleteRow(-1);
+        }
+        drawTable(n_days);
     }
-    countTasks = 0
     }
 
 //Stop the default dragover event
