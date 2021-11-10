@@ -50,8 +50,10 @@ if($stmt = mysqli_prepare($link, $sql)){
 if($inID != null && $inDate != null && $user != null){
   //Now Check if the Task has already been added to the Database, if so we need to alter
   if(checkDatabase($link, $inID) == 1){
+    //Item has already been added to the database, instead update the corrosponding record
     appendDraggable($link, $inID, $inDate, $user, $name, $inColor);
   }else{
+    //If the item has not already been added to the database
     saveDraggable($link, $inID, $inDate, $user,$name, $inColor);
   }
 

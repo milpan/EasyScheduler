@@ -9,6 +9,25 @@ const n_days = 14;
 
 var ExampleTasks =[];
 var DistinctNames =[];
+var Weekdays = ['Mon', 'Tue', 'Wed','Thu','Fri','Sat','Sun'];
+//Function that Draws the Table depending on n_days
+function drawTable(n_days){
+    var scheduler = document.getElementById("scheduler");
+    //Declare the Dateheader Object to Inject into the HTML
+    var dateheadertoinject = '<div class="dateheader"><i class="fas fa-angle-left prev"></i><div class="CurrentDate"><a>Date Failed to Render</a></div><i class="fas fa-angle-right next"></i></div>';
+    //Create an array of weekdays depending on the number of days inputted to be shown
+    WeekdayArray = [];
+    for(var i=0; i<n_days; i++){
+        WeekdayArray.push("<th>"+Weekdays[i % Weekdays.length]+"</th>");
+    }
+    //Convert our Array into One Big String Ready for Rendering
+    var weekdaystring = WeekdayArray.join("");
+    //Now to inject the table we wish to render depending on the number of days chosen
+    var tabletoinject = '<table class="myView" id="myView" style="overflow: scroll;"><thead><tr><th style="position: relative;">Name<div style="top: 0px; right: 0px; width: 1px; position: absolute; cursor: col-resize; background-color: slategray; user-select: none; height: 196px;"></div></th>'+weekdaystring+'</tr></table>';
+    var mainInject = dateheadertoinject + tabletoinject;
+    scheduler.innerHTML = mainInject;
+}
+
 //Using the currentdate time obtain an array of ExampleTasks
 function obtainTasks(currentDate, number_days){
 /*
@@ -76,6 +95,19 @@ function getNames(currentDate, ExampleTasks){
         }
         };
         
+}
+
+//This function is responsible for obtaining the number of elements in the SQL array to allow for new ID's of draggables.
+function getElements(){
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("GET", "./tools/getcount.php", true);
+    xmlhttp.send();
+    xmlhttp.onreadystatechange = function(){
+        if (this.readyState == 4 && this.status == 200){
+            //If the php call is succesfull then decode the Json of the Tasks
+            CountTasks = this.responseText; 
+        }
+        };
 }
 
 //Function that populates the table with tasks once the inital render has been made
@@ -197,9 +229,10 @@ function save_class(RefClass, startDate, element){
     var id = RefClass.match(/\d+/g)[0];
     var user = RefClass.match(/[a-zA-Z]+/g)[0];
     var texttoPopulate = element.innerHTML;
+    var itemID = element.id.match(/\d+/g)[0];
     var taskDate = inStartDate.add(id, 'days').format('DD-MM-YYYY');
     Task = {
-    id:30,
+    id:itemID,
     name: texttoPopulate,
     color: "blue",
     assigned_to: user,
@@ -256,6 +289,7 @@ function onDragOver(event){
 
 //Main function to start the scheduler
 function start(){
+    
     var ExampleTasks = obtainTasks(date,n_days);
     //startRender() is called after the Async AJAX Call
 }
@@ -270,5 +304,7 @@ function startRender(date, ExampleTasks, NamesIn){
 }
 
 //Main
+drawTable(n_days);
+getElements();
 init_button_listener();
 start();
