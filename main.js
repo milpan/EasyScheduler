@@ -163,8 +163,7 @@ function saveTasktoSQL(TaskIn){
     xmlhttp.send();
     xmlhttp.onreadystatechange = function(){
         if (this.readyState == 4 && this.status == 200){
-            //If the php call is succesfull then decode the Json of the Tasks
-            console.log(this.responseText);
+            //If the php call is succesful then decode the Json of the Tasks
         }
         };
 }
