@@ -1,9 +1,6 @@
 <?php
-$serverip = "localhost";
-$username = "root";
-$password = "";
-$dbName = "taskExample";
-$link = new mysqli($serverip, $username, $password, $dbName);
+//This php script is responsible for retrieving tasks on the selected calendar timeframe
+require "php_config.php";
 $inDate = $_REQUEST["q"];
 $n_days = $_REQUEST["d"];
 global $outArray;

@@ -19,6 +19,7 @@ const Draggables = [{
     color: "blue",
 }]
 var ExampleTasks =[];
+var DistinctNames =[];
 //Using the currentdate time obtain an array of ExampleTasks
 function obtainTasks(currentDate, number_days){
 /*
@@ -34,7 +35,8 @@ xmlhttp.onreadystatechange = function(){
         //console.log(this.responseText);
         //document.write(this.responseText);
         ExampleTasks = JSON.parse(this.responseText);
-        startRender(currentDate, ExampleTasks);
+        getNames(currentDate, ExampleTasks);
+        
         
     }
     };
@@ -69,6 +71,20 @@ const ExampleTasks = [{
     assigned_to: "Audrey"
     }];
 */
+//This function calls a PHP Script which obtains the Distinct Names from the SQL Database
+function getNames(currentDate, ExampleTasks){
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("GET", "tablenames.php", true);
+    xmlhttp.send();
+    xmlhttp.onreadystatechange = function(){
+        if (this.readyState == 4 && this.status == 200){
+            //If the php call is succesfull then decode the Json of the Tasks
+            DistinctNames = JSON.parse(this.responseText);
+            startRender(currentDate, ExampleTasks, DistinctNames);
+        }
+        };
+        
+}
 
 //Function that populates the table with tasks once the inital render has been made
 function populate_table(Tasks, startDate){
@@ -135,16 +151,14 @@ cell.appendChild(div);
 }
 
 //Main Function which Renders the Table on Open
-function render_Table(TasksIn){
-//We first obtain a List of all the Names we're going to populate
-const Names = getUniqueListBy(TasksIn, 'assigned_to');
-for (j=0; j<Names.length; j++){
+function render_Table(NamesIn){
+for (j=0; j<NamesIn.length; j++){
 //We have the names now lets populate the table with the names
 var tbl = document.getElementById('myView'), // table reference
 row = tbl.insertRow(tbl.rows.length),   // append table row
 i;
 for(i=0; i<tbl.rows[0].cells.length; i++){
-createInitialCell(row.insertCell(i), Names[j], i);
+createInitialCell(row.insertCell(i), NamesIn[j], i);
 }
 
 }
@@ -237,14 +251,13 @@ function onDragOver(event){
 
 //Main function to start the scheduler
 function start(){
-
     var ExampleTasks = obtainTasks(date,n_days);
     //startRender() is called after the Async AJAX Call
 }
 //Starts the Rendering Process (has to be seperate function due to AJAX Call being async)
-function startRender(date, ExampleTasks){
+function startRender(date, ExampleTasks, NamesIn){
     setCalendarDate(date);
-    render_Table(ExampleTasks);
+    render_Table(NamesIn);
     populate_table(ExampleTasks, date);
     start_resize_grid();
     
