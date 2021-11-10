@@ -5,6 +5,8 @@
 
 .container{
 width: auto;
+height: auto;
+overflow-y: hidden;
 justify-content: center;
 align-items: center;
 }
@@ -28,13 +30,15 @@ text-overflow: ellipsis;
 }
 
 .Scheduler{
+    overflow-y: hidden;
     overflow-x: scroll;
     width: auto;
     box-shadow: 0 0.2rem 1rem rgba(0,0,0,0.4) ;
-    height: "40%";
+    height: auto;
 }
 
 .item a{
+    text-align: center;
     background-color: blue;
 }
 /* In order for the drag and drop example pane*/
@@ -81,6 +85,12 @@ text-overflow: ellipsis;
     margin-top: 10px;
     margin-bottom: 10px;
     padding: 10px;
+}
+
+.item:hover{
+    align-content: center;
+    transform:scale(1.1);
+    width: auto;
 }
 
 .dropzone{
@@ -137,6 +147,7 @@ text-align: center;
 .myView{
     overflow-x: scroll;
     width: 100%;
+    height: auto;
     align-items: center;
     table-layout: fixed;
     border-collapse: collapse;

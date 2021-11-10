@@ -157,6 +157,18 @@ createInitialCell(row.insertCell(i), NamesIn[j], i);
 }
 }
 
+function saveTasktoSQL(TaskIn){
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("GET", "savetosql.php?q=" + TaskIn["date"] + "&id=" + TaskIn["id"] + "&u=" + TaskIn["assigned_to"] + "&tn=" + TaskIn["name"] + "&col=" + TaskIn["color"], true);
+    xmlhttp.send();
+    xmlhttp.onreadystatechange = function(){
+        if (this.readyState == 4 && this.status == 200){
+            //If the php call is succesfull then decode the Json of the Tasks
+            console.log(this.responseText);
+        }
+        };
+}
+
 //Set the header of the Calendar to a certain date
 function setCalendarDate(DateIn){
     //We assume Date is our starting date so we need to calculate the date 2 weeks on
@@ -187,13 +199,14 @@ function save_class(RefClass, startDate, element){
     var user = RefClass.match(/[a-zA-Z]+/g)[0];
     var texttoPopulate = element.innerHTML;
     var taskDate = inStartDate.add(id, 'days').format('DD-MM-YYYY');
-    ExampleTasks.push({
-        id: 8,  
-        date: taskDate,
-        name: texttoPopulate,
-        color: "blue",
-        assigned_to: user
-    });
+    Task = {
+    id:30,
+    name: texttoPopulate,
+    color: "blue",
+    assigned_to: user,
+    date: taskDate 
+    };
+    saveTasktoSQL(Task);
 }
 
 //Function that handles the drop event of items onto the calendar

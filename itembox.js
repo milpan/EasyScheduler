@@ -14,3 +14,4 @@ Draggables = [{
     color: "blue",
     assigned_to: "Pearl"
     }];
+
