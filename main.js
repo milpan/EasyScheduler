@@ -1,23 +1,12 @@
 moment.locale();
 //Need a function which counts the number of draggable items and one to populate them
-function start_draggables(inDraggables){
-for (var i = 0; i<= inDraggables.length; i++){
-    var Draggable = inDraggables[i];
-    
-}
-}
+
 
 const init_date = moment();
 const date = init_date.startOf('isoweek');
 //Number of days of the calendar you wish to display
 const n_days = 14;
-//Build some draggable tasks we wish to be able to drag on
-const Draggables = [{
-    id: 1,
-    date: "27-10-2021",
-    name: "Prerender Test Task",
-    color: "blue",
-}]
+
 var ExampleTasks =[];
 var DistinctNames =[];
 //Using the currentdate time obtain an array of ExampleTasks
@@ -71,7 +60,9 @@ const ExampleTasks = [{
     assigned_to: "Audrey"
     }];
 */
-//This function calls a PHP Script which obtains the Distinct Names from the SQL Database
+var countTasks = 2;
+//This function calls a PHP Script which obtains the Distinct Names from the SQL Database and
+//the draggable tasks defined in itembox.js
 function getNames(currentDate, ExampleTasks){
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.open("GET", "tablenames.php", true);
@@ -80,6 +71,7 @@ function getNames(currentDate, ExampleTasks){
         if (this.readyState == 4 && this.status == 200){
             //If the php call is succesfull then decode the Json of the Tasks
             DistinctNames = JSON.parse(this.responseText);
+            DistinctNames.push(...getUniqueListBy(Draggables, "assigned_to"));
             startRender(currentDate, ExampleTasks, DistinctNames);
         }
         };
@@ -88,6 +80,7 @@ function getNames(currentDate, ExampleTasks){
 
 //Function that populates the table with tasks once the inital render has been made
 function populate_table(Tasks, startDate){
+
 //Iterate over the length of the Tasks
 startDate = moment(startDate);
 for (var i=0; i<Tasks.length; i++){
@@ -256,6 +249,7 @@ function start(){
 }
 //Starts the Rendering Process (has to be seperate function due to AJAX Call being async)
 function startRender(date, ExampleTasks, NamesIn){
+    var countTasks = ExampleTasks.length;
     setCalendarDate(date);
     render_Table(NamesIn);
     populate_table(ExampleTasks, date);
@@ -264,6 +258,5 @@ function startRender(date, ExampleTasks, NamesIn){
 }
 
 //Main
-var countTasks = 0;
 init_button_listener();
 start();

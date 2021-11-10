@@ -92,9 +92,18 @@ padding: 10px;
 
 .empty{
 height: 100%;
+
 /*flex-basis: 100%;
 flex-grow: 1;*/
 }
+
+.empty:hover{
+    filter: brightness(95%);
+    background-color: #e4e8ed;
+    height: 100%;
+    /*flex-basis: 100%;
+    flex-grow: 1;*/
+    }
 
 .dateheader{
 width: 100%;
