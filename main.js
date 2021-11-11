@@ -14,7 +14,7 @@ var Weekdays = ['Mon','Tue', 'Wed','Thu','Fri','Sat','Sun'];
 function drawTable(n_days){
     var scheduler = document.getElementById("scheduler");
     //Declare the Dateheader Object to Inject into the HTML
-    var dateheadertoinject = '<div class="timeframe">Week View<i class="fas fa-calendar-day day"></i>Fortnight View<i class="fas fa-calendar-week fortnight"></i>Month View<i class="fas fa-calendar-alt month"></i></div><div class="dateheader"><i class="fas fa-angle-left prev"></i><div class="CurrentDate"><a>Database Empty/No Connection</a></div><i class="fas fa-angle-right next"></i></div>';
+    var dateheadertoinject = '<div class="timeframeselector"><div class="timeframe">Week View<i class="fas fa-calendar-day day"></i>Fortnight View<i class="fas fa-calendar-week fortnight"></i>Month View<i class="fas fa-calendar-alt month"></i></div></div><div class="dateheader"><i class="fas fa-angle-left prev"></i><div class="CurrentDate"><a>Database Empty/No Connection</a></div><i class="fas fa-angle-right next"></i></div>';
     //Create an array of weekdays depending on the number of days inputted to be shown
     WeekdayArray = [];
     var currentWeekday = moment(date).format('ddd');
@@ -177,7 +177,7 @@ function saveTasktoSQL(TaskIn){
 function setCalendarDate(DateIn){
     //We assume Date is our starting date so we need to calculate the date 2 weeks on
     const endDate = moment(DateIn);
-    endDate.add(n_days, 'days');
+    endDate.add(n_days-1, 'days');
     //Set the Date Variable
     document.querySelector('.CurrentDate a').innerHTML = (DateIn.format('DD-MM-YYYY') + " to " + endDate.format('DD-MM-YYYY'));
     }
@@ -186,7 +186,7 @@ function setCalendarDate(DateIn){
 function init_button_listener(){
     document.querySelector('.prev').addEventListener("click", ()=>{
         if(monthView == 0){
-            deleteTableEntries();
+            deleteTableEntries(1);
             date.subtract(n_days, 'days');
             start();
         } else{
@@ -203,7 +203,7 @@ function init_button_listener(){
             console.log(n_days);
             console.log(date);
             date.add(n_days, 'days');
-            deleteTableEntries();
+            deleteTableEntries(1);
             start();
         }else{
             date.add(1, 'months');
@@ -337,6 +337,7 @@ var countTasks = getElements();
 if(n_days == "30" || n_days == "31"){
     monthView = 1;
 }
+renderItemBox();
 drawTable(n_days);
 getElements();
 //init_button_listener();

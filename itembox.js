@@ -15,3 +15,9 @@ Draggables = [{
     assigned_to: "Pearl"
     }];
 
+//This function is responsible for rendering the draggable tasks by finding a div with the id itembox
+function renderItemBox(){
+var itembox = document.getElementById("itembox");
+var itemboxinjection = '<div class="dropzone" ondragover="onDragOver(event);" ondrop="onDrop(event);"><div class="origin"><h1>Draggable Tasks</h1><div id="draggable-2" class="item" draggable="true" ondragstart="onDragStart(event);">Clean the Car</div><div id="draggable-3" class="item" draggable="true" ondragstart="onDragStart(event);">Mow the Lawn</div></div></div>';
+itembox.innerHTML = itemboxinjection;
+}

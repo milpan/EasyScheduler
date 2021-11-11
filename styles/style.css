@@ -1,6 +1,6 @@
 *{
     font-family: 'Roboto';
-    background-color: whitesmoke;
+    background-color: #20262D;
 }
 
 .container{
@@ -14,24 +14,13 @@ align-items: center;
 .dropzone{
     flex-basis: 100%;
     flex-grow: 1;
+
     border-radius: 2px;
-}
-
-
-
-.test{
-    background: rgb(4,4,168);
-    background: linear-gradient(0deg, rgba(4,4,168,1) 0%, rgba(0,89,255,1) 100%);
-color: white;
-width: auto;
-white-space: nowrap;
-overflow: hidden;
-text-overflow: ellipsis;
 }
 
 .Scheduler{
     overflow-y: hidden;
-    overflow-x: scroll;
+
     width: auto;
     box-shadow: 0 0.2rem 1rem rgba(0,0,0,0.4) ;
     height: auto;
@@ -39,24 +28,42 @@ text-overflow: ellipsis;
 
 .item a{
     text-align: center;
-    background-color: blue;
 }
 /* In order for the drag and drop example pane*/
 .itembox{
-    border: 2px solid black;
-    background-color: dimgray;
+    border: 1px solid black;
+    background-color: #6200EE;
+    width: 50%;
     display: flex;
     justify-content: left;
+    box-shadow: 0 0.2rem 1rem rgba(0,0,0,0.4) ;
     padding: 10px;
-    border-radius: 25px;
+}
+
+.timeframe i{
+    cursor: pointer;
+    background: inherit;
+    color: white;
+}
+
+.timeframeselector{
+    float:right;
+    align-self: right;
+    text-align: right;
+    align-content: right;
+    justify-content: right;
+    padding-bottom: 8px;
 }
 
 .timeframe{
-    width: auto;
-    cursor: pointer;
-    justify-content: space-between;
-    align-content: flex-end;
-    text-align: end;
+    padding-top: 10px;
+    align-self: right;
+    padding-left: 10px;
+    background: #6200EE;
+    width:max-content;
+    color: white;
+    padding-bottom: 10px;
+    border-radius: 30px;
 }
 
 .timeframe i{
@@ -68,12 +75,13 @@ text-overflow: ellipsis;
     background-color: inherit;
     flex-basis: 100%;
     flex-grow: 1;
+    
     padding: 10px;
 }
 
 .origin h1{
     vertical-align: top;
-    font-size: 14pt;
+    font-size: 10pt;
     background-color: inherit;
     color: white;
 }
@@ -88,9 +96,13 @@ text-overflow: ellipsis;
     bottom: 0;
 }
 
+.name{
+    color: white;
+    background: inherit;
+}
+
 .item{
-    background: rgb(4,4,168);
-    background: linear-gradient(0deg, rgba(4,4,168,1) 0%, rgba(0,89,255,1) 100%);
+    background: #3700B3;
     color: white;
     white-space: nowrap;
     overflow: hidden;
@@ -99,6 +111,8 @@ text-overflow: ellipsis;
     margin-bottom: 10px;
     padding: 10px;
     cursor: grab;
+    font-size: small;
+    border-radius: 30px;
 }
 
 .item:hover{
@@ -116,14 +130,14 @@ padding: 10px;
 
 .empty{
 height: 100%;
-
+background: inherit;
 /*flex-basis: 100%;
 flex-grow: 1;*/
 }
 
 .empty:hover{
     filter: brightness(95%);
-    background-color: #e4e8ed;
+    background-color: #20262D;
     height: 100%;
     /*flex-basis: 100%;
     flex-grow: 1;*/
@@ -131,13 +145,14 @@ flex-grow: 1;*/
 
 .dateheader{
 width: 100%;
+border-radius: 10px 10px 0px 0px;
 vertical-align: center;
-padding-top: 10px;
+padding-top: 5px;
 display: flex;
 justify-content: space-between;
+padding-bottom: 5px;
 color: white;
-background: rgb(4,4,168);
-background: linear-gradient(0deg, rgba(4,4,168,1) 0%, rgba(0,89,255,1) 100%);
+background: #6200EE;
 text-shadow: 0 0.1rem 1rem rgb(0,0,0);
 align-content: center;
 justify-content: center;
@@ -146,19 +161,20 @@ text-align: center;
 
 .CurrentDate a{
     vertical-align: center;
-    background: rgb(4,4,168);
-    background: linear-gradient(0deg, rgba(4,4,168,1) 0%, rgba(0,89,255,1) 100%);
+    background-color: #6200EE;
 }
 
 /* In order for the selection pane */
 .dateheader i {
+    margin-left: 5px;
+    margin-right: 5px;
     vertical-align: center;
-    background: rgb(4,4,168);
-    background: linear-gradient(0deg, rgba(4,4,168,1) 0%, rgba(0,89,255,1) 100%);
+    background-color: #6200EE;
     cursor: pointer;
 }
 
 .myView{
+    background: #1E1E1E;
     overflow-x: scroll;
     width: 100%;
     height: auto;
@@ -168,20 +184,25 @@ text-align: center;
 }
 
 .myView th{
-border-left: 1px solid grey;
+background: #121212;
+color: white;
+font-weight: 500;
+border-left: 1px solid #515151;
 }
 
 .myView td{
+    background: #1E1E1E;
     width: auto;
-    border-left: 1px solid grey;
+    border-left: 1px solid #515151;
     height: inherit;
-    }
+}
 
 .myView thead tr{
+    background: #1E1E1E;
     height: 1px;
-    border: 1px solid grey;
-    border-top: 1px solid grey;
-    border-bottom: 1px solid grey;
+    border: 1px solid #515151;
+    border-top: 1px solid #515151;
+    border-bottom: 1px solid #515151;
 }
 
 .popup{
@@ -194,6 +215,6 @@ border-left: 1px solid grey;
 }
 
 .name{
-    font-weight: bold;
+    font-weight:500;
     text-align: center;
 }
