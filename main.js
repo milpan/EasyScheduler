@@ -10,6 +10,21 @@ var ExampleTasks =[];
 var DistinctNames =[];
 var Weekdays = ['Mon','Tue', 'Wed','Thu','Fri','Sat','Sun'];
 
+//Define some draggable Tasks (these will later be populated by a MYSQL Call)
+Draggables = [{
+    id: 10,
+    name: "Prerender Test Task",
+    color: "blue",
+    },{
+    id: 21,
+    name: "Wash Dishes",
+    color: "blue",
+    },
+    {
+    id: 22,
+    name: "One more for good luck!",
+    color: "blue",
+    }];
 //Function that Draws the Table depending on n_days
 function drawTable(n_days){
     var scheduler = document.getElementById("scheduler");
@@ -66,7 +81,7 @@ function getNames(currentDate, ExampleTasks){
         if (this.readyState == 4 && this.status == 200){
             //If the php call is succesfull then decode the Json of the Tasks
             DistinctNames = JSON.parse(this.responseText);
-            DistinctNames.push(...getUniqueListBy(Draggables, "assigned_to"));
+            //DistinctNames.push(...getUniqueListBy(Draggables, "assigned_to"));
             DistinctNames = [...new Set(DistinctNames)];
             startRender(currentDate, ExampleTasks, DistinctNames);
         }};
@@ -319,7 +334,6 @@ function onDragOver(event){
 
 //Main function to start the scheduler
 function start(){
-    
     var ExampleTasks = obtainTasks(date,n_days);
     //startRender() is called after the Async AJAX Call
 }
@@ -339,7 +353,7 @@ var countTasks = getElements();
 if(n_days == "30" || n_days == "31"){
     monthView = 1;
 }
-renderItemBox();
+renderItemBox(Draggables);
 drawTable(n_days);
 getElements();
 start();

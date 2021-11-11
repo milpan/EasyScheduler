@@ -9,7 +9,6 @@ function getCount($link){
         if($row = $result->fetch_assoc()){
             echo $row["COUNT(*)"];
         }
-        
     }
 }
 

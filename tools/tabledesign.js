@@ -26,7 +26,7 @@ function createScaleableDiv(height){
 var div = document.createElement('div');
 div.style.top = 0;
 div.style.right = 0;
-div.style.width = '1px';
+div.style.width = '2px';
 div.style.position = 'absolute';
 div.style.cursor = 'col-resize';
 div.style.backgroundColor = 'slategray';
