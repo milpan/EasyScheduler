@@ -1,23 +1,28 @@
 moment.locale();
 //Need a function which counts the number of draggable items and one to populate them
-
-
 const init_date = moment();
-const date = init_date.startOf('isoweek');
+var date = init_date.startOf('isoweek');
 //Number of days of the calendar you wish to display
-var n_days = 30;
-
+var n_days = 7;
+//This variable is used to identify wether we are in month view for the next and back buttons
+var monthView = 0;
 var ExampleTasks =[];
 var DistinctNames =[];
-var Weekdays = ['Mon', 'Tue', 'Wed','Thu','Fri','Sat','Sun'];
+var Weekdays = ['Mon','Tue', 'Wed','Thu','Fri','Sat','Sun'];
+
 //Function that Draws the Table depending on n_days
 function drawTable(n_days){
     var scheduler = document.getElementById("scheduler");
     //Declare the Dateheader Object to Inject into the HTML
-    var dateheadertoinject = '<div class="dateheader"><i class="fas fa-angle-left prev"></i><div class="CurrentDate"><a>Date Failed to Render</a></div><i class="fas fa-angle-right next"></i></div>';
+    var dateheadertoinject = '<div class="timeframe">Week View<i class="fas fa-calendar-day day"></i>Fortnight View<i class="fas fa-calendar-week fortnight"></i>Month View<i class="fas fa-calendar-alt month"></i></div><div class="dateheader"><i class="fas fa-angle-left prev"></i><div class="CurrentDate"><a>Database Empty/No Connection</a></div><i class="fas fa-angle-right next"></i></div>';
     //Create an array of weekdays depending on the number of days inputted to be shown
     WeekdayArray = [];
-    for(var i=0; i<n_days; i++){
+    var currentWeekday = moment(date).format('ddd');
+    var TempWeekdays = [];
+
+    //Get the index of the currentWeekday in the Weekdays array
+    var toStartFrom = Weekdays.indexOf(currentWeekday);
+    for(var i=toStartFrom; i<n_days+toStartFrom; i++){
         WeekdayArray.push("<th>"+Weekdays[i % Weekdays.length]+"</th>");
     }
     //Convert our Array into One Big String Ready for Rendering
@@ -26,6 +31,8 @@ function drawTable(n_days){
     var tabletoinject = '<table class="myView" id="myView" style="overflow: scroll;"><thead><tr><th style="position: relative;">Name<div style="top: 0px; right: 0px; width: 1px; position: absolute; cursor: col-resize; background-color: slategray; user-select: none; height: 196px;"></div></th>'+weekdaystring+'</tr></table>';
     var mainInject = dateheadertoinject + tabletoinject;
     scheduler.innerHTML = mainInject;
+    //After rendering the table start the button listener
+    init_button_listener();
 }
 
 //Using the currentdate time obtain an array of ExampleTasks
@@ -44,42 +51,11 @@ xmlhttp.onreadystatechange = function(){
         //document.write(this.responseText);
         ExampleTasks = JSON.parse(this.responseText);
         getNames(currentDate, ExampleTasks);
-        
-        
+        return ExampleTasks;
     }
     };
-
-    
 }
-/*
-//Build some example tasks (NOT USING MYSQL)
-const ExampleTasks = [{
-    id: 1,
-    date: "27-10-2021",
-    name: "Prerender Test Task",
-    color: "blue",
-    assigned_to: "Fred"
-    },{
-    id: 2,
-    date: "25-10-2021",
-    name: "Wash Dishes",
-    color: "blue",
-    assigned_to: "Pearl"
-    },{
-    id: 3,
-    date: "28-10-2021",
-    name: "Toilet Break",
-    color: "blue",
-    assigned_to: "Audrey"
-    },{
-    id: 4,
-    date: "29-10-2021",
-    name: "Tea Break",
-    color: "blue",
-    assigned_to: "Audrey"
-    }];
-*/
-var countTasks = 2;
+
 //This function calls a PHP Script which obtains the Distinct Names from the SQL Database and
 //the draggable tasks defined in itembox.js
 function getNames(currentDate, ExampleTasks){
@@ -91,10 +67,9 @@ function getNames(currentDate, ExampleTasks){
             //If the php call is succesfull then decode the Json of the Tasks
             DistinctNames = JSON.parse(this.responseText);
             DistinctNames.push(...getUniqueListBy(Draggables, "assigned_to"));
+            DistinctNames = [...new Set(DistinctNames)];
             startRender(currentDate, ExampleTasks, DistinctNames);
-        }
-        };
-        
+        }};
 }
 
 //This function is responsible for obtaining the number of elements in the SQL array to allow for new ID's of draggables.
@@ -112,7 +87,6 @@ function getElements(){
 
 //Function that populates the table with tasks once the inital render has been made
 function populate_table(Tasks, startDate){
-
 //Iterate over the length of the Tasks
 startDate = moment(startDate);
 for (var i=0; i<Tasks.length; i++){
@@ -126,7 +100,6 @@ for (var i=0; i<Tasks.length; i++){
         var CelltoPopulate = Name+DaysDiff;
         var CelltoPopulate = CelltoPopulate.replace(/-/g, "");
         createCell(CelltoPopulate, Task);
-        
     }
 }
 }
@@ -147,7 +120,7 @@ txt = document.createTextNode(taskName);
 div.appendChild(txt);
 div.setAttribute('class', 'item');
 div.setAttribute('className', 'item');
-div.setAttribute('id', "draggable-"+countTasks);
+div.setAttribute('id', "draggable-"+taskID);
 div.setAttribute('ondragstart', 'onDragStart(event)');
 div.setAttribute('draggable', 'true');
 refdiv.appendChild(div);
@@ -212,33 +185,60 @@ function setCalendarDate(DateIn){
 //This function initialises the Calendars Next and Back Button   
 function init_button_listener(){
     document.querySelector('.prev').addEventListener("click", ()=>{
-        deleteTableEntries();
-        date.subtract(n_days, 'days');
-        start();
-        
+        if(monthView == 0){
+            deleteTableEntries();
+            date.subtract(n_days, 'days');
+            start();
+        } else{
+            //We are in month View
+            date.subtract(1, 'months');
+            date = moment(date).startOf('month');
+            n_days = moment(date).daysInMonth();
+            deleteTableEntries(1);
+            start();
+        }
     });
     document.querySelector('.next').addEventListener("click", ()=>{
-        deleteTableEntries();
-        date.add(n_days, 'days');
-        start();
+        if(monthView == 0){
+            console.log(n_days);
+            console.log(date);
+            date.add(n_days, 'days');
+            deleteTableEntries();
+            start();
+        }else{
+            date.add(1, 'months');
+            date = moment(date).startOf('month');
+            n_days = moment(date).daysInMonth();
+            //We are in month View
+            deleteTableEntries(1);
+            //date.add(n_days, 'days');
+            start();
+        }
     });
     document.querySelector('.day').addEventListener("click", ()=>{
+        monthView = 0;
         n_days = 7;
         deleteTableEntries(1);
         start();
         init_button_listener();
     });
     document.querySelector('.fortnight').addEventListener("click", ()=>{
+        monthView = 0;
         n_days = 14;
         deleteTableEntries(1);
         start();
         init_button_listener();
     });
     document.querySelector('.month').addEventListener("click", ()=>{
-        n_days = 31;
+        monthView = 1;
+        date = moment().startOf('month');
+        //We also need to check which day to start the Names of the Weekdays from since each Month does not specifically start with a Monday.
+        var startWeekName = moment(date).format('ddd');
+        console.log(startWeekName);
+        n_days = moment().daysInMonth();
         deleteTableEntries(1);
         start();
-        init_button_listener();
+        //init_button_listener();
     });
     }
 //Function which pushes tasks to the Array once they have been dragged
@@ -331,8 +331,13 @@ function startRender(date, ExampleTasks, NamesIn){
     
 }
 
-//Main
+//----Main Decleration----//
+var countTasks = getElements();
+//Check if calendar is in month view if so activate the trigger on launch
+if(n_days == "30" || n_days == "31"){
+    monthView = 1;
+}
 drawTable(n_days);
 getElements();
-init_button_listener();
+//init_button_listener();
 start();
