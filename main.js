@@ -112,19 +112,25 @@ var taskName = Task['name'];
 var taskID = Task['id'];
 //Find the empty cell we wish to populate
 var refdiv = document.getElementById(cellID);
-
-
 //Create a new Div
 var div = document.createElement('div'),
 txt = document.createTextNode(taskName);
 div.appendChild(txt);
-div.setAttribute('class', 'item');
-div.setAttribute('className', 'item');
-div.setAttribute('id', "draggable-"+taskID);
-div.setAttribute('ondragstart', 'onDragStart(event)');
-div.setAttribute('draggable', 'true');
-refdiv.appendChild(div);
-countTasks += 1;
+if(taskName != "Holiday"){
+    div.setAttribute('class', 'item');
+    div.setAttribute('className', 'item');
+    div.setAttribute('id', "draggable-"+taskID);
+    div.setAttribute('ondragstart', 'onDragStart(event)');
+    div.setAttribute('draggable', 'true');
+    refdiv.appendChild(div);
+    countTasks += 1;
+}else{
+    div.setAttribute('class', 'holiday');
+    div.setAttribute('className', 'holiday');
+    div.setAttribute('id', "holiday-"+taskID);
+    refdiv.appendChild(div);
+    countTasks += 1;
+}
 }
 
 //Function which Handles Adding the empty Cells to the Table
@@ -206,12 +212,12 @@ function init_button_listener(){
             deleteTableEntries(1);
             start();
         }else{
+            //We are in month View
             date.add(1, 'months');
             date = moment(date).startOf('month');
             n_days = moment(date).daysInMonth();
             //We are in month View
             deleteTableEntries(1);
-            //date.add(n_days, 'days');
             start();
         }
     });
@@ -220,25 +226,21 @@ function init_button_listener(){
         n_days = 7;
         deleteTableEntries(1);
         start();
-        init_button_listener();
     });
     document.querySelector('.fortnight').addEventListener("click", ()=>{
         monthView = 0;
         n_days = 14;
         deleteTableEntries(1);
         start();
-        init_button_listener();
     });
     document.querySelector('.month').addEventListener("click", ()=>{
+        n_days = moment().daysInMonth();
+        deleteTableEntries(1);
         monthView = 1;
         date = moment().startOf('month');
         //We also need to check which day to start the Names of the Weekdays from since each Month does not specifically start with a Monday.
         var startWeekName = moment(date).format('ddd');
-        console.log(startWeekName);
-        n_days = moment().daysInMonth();
-        deleteTableEntries(1);
         start();
-        //init_button_listener();
     });
     }
 //Function which pushes tasks to the Array once they have been dragged
@@ -340,5 +342,4 @@ if(n_days == "30" || n_days == "31"){
 renderItemBox();
 drawTable(n_days);
 getElements();
-//init_button_listener();
 start();

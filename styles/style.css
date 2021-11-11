@@ -14,13 +14,11 @@ align-items: center;
 .dropzone{
     flex-basis: 100%;
     flex-grow: 1;
-
     border-radius: 2px;
 }
 
 .Scheduler{
     overflow-y: hidden;
-
     width: auto;
     box-shadow: 0 0.2rem 1rem rgba(0,0,0,0.4) ;
     height: auto;
@@ -48,11 +46,13 @@ align-items: center;
 
 .timeframeselector{
     float:right;
+    /*box-shadow: 0 0.2rem 1rem rgba(0,0,0,0.4) ;*/
     align-self: right;
     text-align: right;
     align-content: right;
     justify-content: right;
     padding-bottom: 8px;
+    
 }
 
 .timeframe{
@@ -113,6 +113,22 @@ align-items: center;
     cursor: grab;
     font-size: small;
     border-radius: 30px;
+}
+
+.holiday{
+    background: repeating-linear-gradient(
+        -45deg,
+        #20262D,
+        #4a00e0 10px,
+        #20262D 10px,
+        #4a00e0 20px
+      );
+    color: white;
+    height: inherit;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0px;
 }
 
 .item:hover{
@@ -181,6 +197,7 @@ text-align: center;
     align-items: center;
     table-layout: fixed;
     border-collapse: collapse;
+    box-shadow: 0 0.2rem 1rem rgba(0,0,0,0.4) ;
 }
 
 .myView th{

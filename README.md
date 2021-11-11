@@ -1,20 +1,30 @@
 # EasyScheduler
-
-![EasyScheduler - An easy scheduling tool](./example.gif)
-
-Simple task scheduler built using Vanilla Javascript and HTML to assign tasks to certain users. Supports drag drop functionality of tasks onto the grid. 
-## Features to Implement
-Month View and 7 Day View allowing users to easily select month and year instead of scrolling through the calendar.
-Support for Holidays, greying out cells.
-Hover-over events to allow for the deletion and edit of tasks.
-## How to Use
-index.html shows a working demo of the scheduler, it can be set up by constructing a container with an element of class 'Scheduler' and an id of 'scheduler'. Javascript will do the rest!
-```
+![EasyScheduler - An Easy to Use Scheduling tool](./example.gif)
+EasyScheduler is a simple task scheduling tool built in Vanilla JS, with a PHP and MySQL backend. 
+## Features
+![Supports multiple or custom timeframes easily](./switchmonthexample.gif)
+Supports a simple drag drop functionality to assign tasks to users. Dynamic MySQL backend allows for easy application for backend developers. Support for holidays as shown in the Example, 3 views (week, fortnight and month) supported with custom timeframes being easy to implement. 
+## Getting Started
+The scheduler can be initialised by constructing a container with a child class 'Scheduler' and an ID of 'scheduler'. EasyScheduler will handle the rest!
+```html
 <div class="container">
     <div id="scheduler" class="Scheduler">
     </div>
 </div>
 ```
-Of course remember to include both Moment.JS and the relevant JavaScript files as in the working example in index.html 
+Getting started using the drag and drop functionality is simple and follows a similar method!
+```html
+<div id="itembox" class="itembox"></div>
+```
+See the example in index.html for more examples of use-cases and functionality. Make sure to include Moment.JS and relevant JS scripts in your HTML file.
+## Contributions
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+### Upcoming Features
+
+* Hover-over mouse events to provide greater description of tasks on the grid.
+* Support for UK/US bank holidays to be automatically populated
+* Multi-day/timeframe events
+* Simpler support for different date formats
+
 ## License
-This code is free for modification for non-profit purposes. Commercial use and modification of this project and its source code to be approved by myself first.
+This code is free for modification for non-profit purposes. Commercial use and modification of this project and its source code must be approved my milpan first.

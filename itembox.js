@@ -15,6 +15,11 @@ Draggables = [{
     assigned_to: "Pearl"
     }];
 
+//This function is responsible for obtaining tasks in the database with no user assigned which can later be passed to renderItemBox
+function getDraggables(){
+
+}
+
 //This function is responsible for rendering the draggable tasks by finding a div with the id itembox
 function renderItemBox(){
 var itembox = document.getElementById("itembox");
