@@ -9,6 +9,8 @@ $outArray = array();
 function obtainTasks($link, $inDate, $n_days){
     global $outArray;
     $inDate = date('Y-m-d', strtotime($inDate));
+    //Subtract 1 from the call so we dont get next Mondays Tasks
+    $n_days = $n_days - 1;
     //$inDate -> Starting date of the week tasks are to be rendered
     //$n_days -> Number of days from the starting date of tasks to recieve
     $endDate = date('Y-m-d', strtotime($inDate . "+ {$n_days} days"));   
