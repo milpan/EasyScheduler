@@ -144,6 +144,10 @@ align-items: center;
     border-radius: 30px;
 }
 
+.item i{
+    background-color: inherit;
+}
+
 .delete{
     background: #6200EE !important;
     color: white;

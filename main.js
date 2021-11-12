@@ -9,7 +9,7 @@ var monthView = 0;
 var ExampleTasks =[];
 var DistinctNames =[];
 var Weekdays = ['Mon','Tue', 'Wed','Thu','Fri','Sat','Sun'];
-
+var countTasks = 0;
 //Define some draggable Tasks (these will later be populated by a MYSQL Call)
 Draggables = [{
     id: 10,
@@ -87,7 +87,8 @@ function getNames(currentDate, ExampleTasks){
         }};
 }
 
-//This function is responsible for obtaining the number of elements in the SQL array to allow for new ID's of draggables.
+
+//This function is responsible for obtaining the number of elements in the SQL array to allow for new ID's of draggables SPECIAL FUNC which runs the itembox draggable once its got counttasks.
 function getElements(){
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.open("GET", "./tools/getcount.php", true);
@@ -95,7 +96,8 @@ function getElements(){
     xmlhttp.onreadystatechange = function(){
         if (this.readyState == 4 && this.status == 200){
             //If the php call is succesfull then decode the Json of the Tasks
-            CountTasks = this.responseText; 
+            var countTasks = this.responseText; 
+            renderItemBox(Draggables, countTasks);
         }
         };
 }
@@ -132,9 +134,10 @@ if(hasWhiteSpace(cellID)){
 //Find the empty cell we wish to populate
 var refdiv = document.getElementById(cellID);
 //Create a new Div
-var div = document.createElement('div'),
-txt = document.createTextNode(taskName);
-div.appendChild(txt);
+var div = document.createElement('div');
+//txt = document.createTextNode(taskName);
+div.innerHTML = taskName;
+//div.appendChild(innerh);
 if(taskName == "Holiday"){
     div.setAttribute('class', 'holiday');
     div.setAttribute('className', 'holiday');
@@ -275,12 +278,25 @@ function init_button_listener(){
     });
 }
 
+//This function dynamically updates tasks where you can edit the text after changing focus
+function onBlur(event){
+var target = event.target;
+var targetparent = target.parentElement;
+//Check that the target parent parent is a EMPTY and if so lets update the record on the Database
+var targettarget = targetparent.parentElement;
+if(targettarget.getAttribute("class")=="empty"){
+save_class(targettarget.getAttribute('username'),date, targetparent);
+console.log("Succesfully updated the item");
+}
+}
+
 //Function which pushes tasks to the Array once they have been dragged
 function save_class(RefClass, startDate, element){
     var inStartDate = moment(startDate);
     var id = RefClass.match(/\d+/g)[0];
     var user = RefClass.match(/[a-zA-Z]+/g).join(" ");
     var texttoPopulate = element.innerHTML;
+    console.log(texttoPopulate);
     var itemID = element.id.match(/\d+/g)[0];
     var taskDate = inStartDate.add(id, 'days').format('DD-MM-YYYY');
     Task = {
@@ -305,8 +321,7 @@ function onDrop(event){
     const dropzone = event.target;
     //Check our target is not another draggable item
     if(dropzone.className == "empty"){
-    //Call the function to handle storing dragged tasks 
-    console.log(dropzone.getAttribute('username'));
+    //Call the function to handle storing dragged tasks
     save_class(dropzone.getAttribute('username'), date, draggableElement);
     //Put our draggable div into the dropzone
     dropzone.appendChild(draggableElement);
@@ -405,7 +420,7 @@ var countTasks = getElements();
 if(n_days == "30" || n_days == "31"){
     monthView = 1;
 }
-renderItemBox(Draggables);
+var countTasks = getElements();
+renderItemBox(Draggables, countTasks);
 drawTable(n_days);
-getElements();
 start();
