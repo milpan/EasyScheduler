@@ -29,7 +29,7 @@ Draggables = [{
 function drawTable(n_days){
     var scheduler = document.getElementById("scheduler");
     //Declare the Dateheader Object to Inject into the HTML
-    var dateheadertoinject = '<div class="timeframeselector"><div class="timeframe">Week View<i class="fas fa-calendar-day day"></i>Fortnight View<i class="fas fa-calendar-week fortnight"></i>Month View<i class="fas fa-calendar-alt month"></i></div></div><div class="dateheader"><i class="fas fa-angle-left prev"></i><div class="CurrentDate"><a>Database Empty/No Connection</a></div><i class="fas fa-angle-right next"></i></div>';
+    var dateheadertoinject = '<div class="timeframeselector"><div id="delete" title="Delete Item" class="delete" ondragover="onDragOver(event);" ondrop="onDropDelete(event);"><i class="fas fa-trash delete"></i><i>Delete Item</i></div><div class="timeframe">Week View<i class="fas fa-calendar-day day" title="Week View"></i>Fortnight View<i class="fas fa-calendar-week fortnight" title="Fortnight View"></i>Month View<i class="fas fa-calendar-alt month" title="Month View"></i></div></div><div class="dateheader"><i class="fas fa-angle-left prev"></i><div class="CurrentDate"><a>Database Empty/No Connection</a></div><i class="fas fa-angle-right next"></i></div>';
     //Create an array of weekdays depending on the number of days inputted to be shown
     WeekdayArray = [];
     var currentWeekday = moment(date).format('ddd');
@@ -221,8 +221,6 @@ function init_button_listener(){
     });
     document.querySelector('.next').addEventListener("click", ()=>{
         if(monthView == 0){
-            console.log(n_days);
-            console.log(date);
             date.add(n_days, 'days');
             deleteTableEntries(1);
             start();
@@ -267,7 +265,7 @@ function save_class(RefClass, startDate, element){
     var itemID = element.id.match(/\d+/g)[0];
     var taskDate = inStartDate.add(id, 'days').format('DD-MM-YYYY');
     Task = {
-    id:itemID,
+    id: itemID,
     name: texttoPopulate,
     color: "blue",
     assigned_to: user,
@@ -291,6 +289,32 @@ function onDrop(event){
     save_class(dropzone.id, date, draggableElement);
     //Put our draggable div into the dropzone
     dropzone.appendChild(draggableElement);
+    }
+    //Reset our data Object
+    event
+    .dataTransfer.clearData();
+}
+
+//Handler for once a task has been dragged on the Delete Item
+function onDropDelete(event){
+    const id = event
+    .dataTransfer
+    .getData('text');
+    var newid = id.match(/\d+/g)[0];
+    //Select our dragable element with the ID
+    const draggableElement = document.getElementById(id);
+    //Confirm the user wants to delete the item from the Scheduler
+    if(confirm("Are you sure you wish to delete this item from the Scheduler?")){
+        //Call the PHP script to delete target from the SQL database
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("GET", "deletefromsql.php?q=" + newid, true);
+        xmlhttp.send();
+        xmlhttp.onreadystatechange = function(){
+            if (this.readyState == 4 && this.status == 200){
+                console.log("Task has been succesfully deleted...")
+                draggableElement.remove();
+            }
+            };
     }
     //Reset our data Object
     event

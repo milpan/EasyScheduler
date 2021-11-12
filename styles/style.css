@@ -45,17 +45,20 @@ align-items: center;
 }
 
 .timeframeselector{
-    float:right;
+    float:left;
+    display: inline;
     /*box-shadow: 0 0.2rem 1rem rgba(0,0,0,0.4) ;*/
     align-self: right;
     text-align: right;
     align-content: right;
     justify-content: right;
     padding-bottom: 8px;
-    
+    width: 100%;
 }
 
 .timeframe{
+    float: right;
+    display: inline;
     padding-top: 10px;
     align-self: right;
     padding-left: 10px;
@@ -116,6 +119,31 @@ align-items: center;
     cursor: grab;
     font-size: small;
     border-radius: 30px;
+}
+
+.delete{
+    background: #6200EE !important;
+    color: white;
+    display: flex;
+    justify-content: left;
+    vertical-align: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 7px;
+    padding-right: 10px;
+    width:fit-content;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.delete i{
+    padding-top:1px;
+    font-style: normal;
+    justify-content: center;
+    vertical-align: center;
+    background: #6200EE !important;
+    color: white;
+    text-align: left;
 }
 
 .holiday{
