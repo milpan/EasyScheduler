@@ -24,6 +24,7 @@ function resizable_Table(table){
 //Function to create the scalable div that sits on the Name column
 function createScaleableDiv(height){
 var div = document.createElement('div');
+
 div.style.top = 0;
 div.style.right = 0;
 div.style.width = '2px';
@@ -32,20 +33,25 @@ div.style.cursor = 'col-resize';
 div.style.backgroundColor = 'slategray';
 div.style.userSelect = 'none';
 div.style.height = height+'px';
+div.setAttribute('id',"divider");
 return div;
 }
 
 //Function that adds mousedown event to provided div element
 function setListeners(div){
-var pageX, curCol, nxtCol, curColWidth, nxtColWidth;
+var pageX, curCol, nxtCol, curColWidth, nxtColWidth, origWidth;
 div.addEventListener('mousedown', function(e){
+//Make the divider a bit bigger so user knows it is selected
+var divider = document.getElementById('divider').style.width = "7px";
 curCol = e.target.parentElement;
 nxtCol = curCol.nextElementSibling;
 pageX = e.pageX;
-curColWidth = curCol.offsetWidth
+curColWidth = curCol.offsetWidth;
+origWidth = curColWidth;
 if(nxtCol)
     nxtColWidth = nxtCol.offsetWidth
 });
+
 document.addEventListener('mousemove', function(e) {
 if(curCol){
 
@@ -58,12 +64,12 @@ if(curCol){
             nxtCol.style.width = 70 + 'px';
             //curCol.style.width = curColWidth + 'px';
         }
-
     }
-}
-});
+}});
+
 //Reset the variables once the mouse is lifted
 document.addEventListener('mouseup', function(e){
+var divider = document.getElementById('divider').style.width = "2px";
 curCol = undefined;
 nxtCol = undefined;
 pageX = undefined;

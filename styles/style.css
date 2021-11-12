@@ -44,6 +44,12 @@ align-items: center;
     color: white;
 }
 
+
+.divider:hover{
+    background-color: green;
+    width: 10px;
+}
+
 .timeframeselector{
     float:left;
     display: inline;
@@ -54,6 +60,23 @@ align-items: center;
     justify-content: right;
     padding-bottom: 8px;
     width: 100%;
+}
+
+.sickness{
+    background: repeating-linear-gradient(
+        -45deg,
+        #152D08,
+        #306612 10px,
+        #20262D 10px,
+        #48991A 20px
+      );
+      width:100%;
+    color: white;
+    height: inherit;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0px;
 }
 
 .timeframe{
@@ -111,13 +134,13 @@ align-items: center;
     white-space: nowrap;
     width: 30%;
     display: flex;
-    overflow: hidden;
+    overflow:hidden;
     text-overflow: ellipsis;
     margin-top: 10px;
     margin-bottom: 10px;
     padding: 10px;
     cursor: grab;
-    font-size: small;
+    font-size: smaller;
     border-radius: 30px;
 }
 

@@ -29,7 +29,7 @@ Draggables = [{
 function drawTable(n_days){
     var scheduler = document.getElementById("scheduler");
     //Declare the Dateheader Object to Inject into the HTML
-    var dateheadertoinject = '<div class="timeframeselector"><div id="delete" title="Delete Item" class="delete" ondragover="onDragOver(event);" ondrop="onDropDelete(event);"><i class="fas fa-trash delete"></i><i>Delete Item</i></div><div class="timeframe">Week View<i class="fas fa-calendar-day day" title="Week View"></i>Fortnight View<i class="fas fa-calendar-week fortnight" title="Fortnight View"></i>Month View<i class="fas fa-calendar-alt month" title="Month View"></i></div></div><div class="dateheader"><i class="fas fa-angle-left prev"></i><div class="CurrentDate"><a>Database Empty/No Connection</a></div><i class="fas fa-angle-right next"></i></div>';
+    var dateheadertoinject = '<div class="timeframeselector"><div id="delete" title="Delete Item" class="delete" ondragover="onDragOver(event);" ondrop="onDropDelete(event);"><i class="fas fa-disease ill"></i><i>Add Sickness</i></div><div id="delete" title="Delete Item" class="delete"><i class="fas fa-trash delete"></i><i>Delete Item</i></div><div class="timeframe">Week View<i class="fas fa-calendar-day day" title="Week View"></i>Fortnight View<i class="fas fa-calendar-week fortnight" title="Fortnight View"></i>Month View<i class="fas fa-calendar-alt month" title="Month View"></i></div></div><div class="dateheader"><i class="fas fa-angle-left prev"></i><div class="CurrentDate"><a>Database Empty/No Connection</a></div><i class="fas fa-angle-right next"></i></div>';
     //Create an array of weekdays depending on the number of days inputted to be shown
     WeekdayArray = [];
     var currentWeekday = moment(date).format('ddd');
@@ -124,14 +124,31 @@ function createCell(cellID, Task){
 cellID -> e.g Audrey1 would populate Monday
 */
 var taskName = Task['name'];
-var taskID = Task['id'];
+var taskID = Task['id']
+//Check if the cellID has any white space
+if(hasWhiteSpace(cellID)){
+    cellID = cellID.replace(/\s+/g,'');
+}
 //Find the empty cell we wish to populate
 var refdiv = document.getElementById(cellID);
 //Create a new Div
 var div = document.createElement('div'),
 txt = document.createTextNode(taskName);
 div.appendChild(txt);
-if(taskName != "Holiday"){
+if(taskName == "Holiday"){
+    div.setAttribute('class', 'holiday');
+    div.setAttribute('className', 'holiday');
+    div.setAttribute('id', "holiday-"+taskID);
+    refdiv.appendChild(div);
+    countTasks += 1;
+}else if(taskName == "Unwell"){
+    div.setAttribute('class', 'sickness');
+    div.setAttribute('className', 'sickness');
+    div.setAttribute('id', "sickness-"+taskID);
+    refdiv.appendChild(div);
+    countTasks += 1;
+}
+else{
     div.setAttribute('class', 'item');
     div.setAttribute('className', 'item');
     div.setAttribute('id', "draggable-"+taskID);
@@ -139,24 +156,21 @@ if(taskName != "Holiday"){
     div.setAttribute('draggable', 'true');
     refdiv.appendChild(div);
     countTasks += 1;
-}else{
-    div.setAttribute('class', 'holiday');
-    div.setAttribute('className', 'holiday');
-    div.setAttribute('id', "holiday-"+taskID);
-    refdiv.appendChild(div);
-    countTasks += 1;
-}
-}
+}}
 
 //Function which Handles Adding the empty Cells to the Table
 function createInitialCell(cell, Name, Iterator){
 //Create a div Element
 var div = document.createElement('div');
 if(Iterator != 0){
+    //Check if the Name has any Empty Spaces and if so strip them
+    if(hasWhiteSpace(Name)){
+        var StrippedName = Name.replace(/\s+/g, '');
+    }
     div.setAttribute('class', 'empty');
     div.setAttribute('className', 'empty');
-    
-    div.setAttribute('id', Name+(Iterator-1));
+    div.setAttribute('username', Name+(Iterator-1));
+    div.setAttribute('id', StrippedName+(Iterator-1));
     div.setAttribute('ondrop', 'onDrop(event)');
     div.setAttribute('ondragover', 'onDragOver(event)');
 } else{
@@ -179,9 +193,13 @@ i;
 for(i=0; i<tbl.rows[0].cells.length; i++){
 createInitialCell(row.insertCell(i), NamesIn[j], i);
 }
+}
+}
 
-}
-}
+//This function checks if a string has any empty spaces for populating Names in format 'First Name-Last Name'
+function hasWhiteSpace(s) {
+    return s.indexOf(' ') >= 0;
+  }
 
 function saveTasktoSQL(TaskIn){
     var xmlhttp = new XMLHttpRequest();
@@ -201,7 +219,7 @@ function setCalendarDate(DateIn){
     endDate.add(n_days-1, 'days');
     //Set the Date Variable
     document.querySelector('.CurrentDate a').innerHTML = (DateIn.format('DD-MM-YYYY') + " to " + endDate.format('DD-MM-YYYY'));
-    }
+}
 
 //This function initialises the Calendars Next and Back Button   
 function init_button_listener(){
@@ -255,12 +273,13 @@ function init_button_listener(){
         var startWeekName = moment(date).format('ddd');
         start();
     });
-    }
+}
+
 //Function which pushes tasks to the Array once they have been dragged
 function save_class(RefClass, startDate, element){
     var inStartDate = moment(startDate);
     var id = RefClass.match(/\d+/g)[0];
-    var user = RefClass.match(/[a-zA-Z]+/g)[0];
+    var user = RefClass.match(/[a-zA-Z]+/g).join(" ");
     var texttoPopulate = element.innerHTML;
     var itemID = element.id.match(/\d+/g)[0];
     var taskDate = inStartDate.add(id, 'days').format('DD-MM-YYYY');
@@ -281,12 +300,14 @@ function onDrop(event){
     .getData('text');
     //Select our dragable element with the ID
     const draggableElement = document.getElementById(id);
+    draggableElement.style.backgroundColor = "#3700B3"
     //Get our target
     const dropzone = event.target;
     //Check our target is not another draggable item
     if(dropzone.className == "empty"){
     //Call the function to handle storing dragged tasks 
-    save_class(dropzone.id, date, draggableElement);
+    console.log(dropzone.getAttribute('username'));
+    save_class(dropzone.getAttribute('username'), date, draggableElement);
     //Put our draggable div into the dropzone
     dropzone.appendChild(draggableElement);
     }
@@ -328,6 +349,12 @@ function onDragStart(event){
     .setData('text/plain', event.target.id);
     //Also set the background colour of the dragged item
     //and the text to black
+    event.currentTarget.style.backgroundColor = '#5E35B1';
+}
+
+//Function to handle the dragging of sickness and vacations
+function onDragStartSickness(event){
+    event.dataTransfer.setData('text/plain', 'Sickness')
     event.currentTarget.style.color = 'white';
 }
 
@@ -361,6 +388,7 @@ function start(){
     var ExampleTasks = obtainTasks(date,n_days);
     //startRender() is called after the Async AJAX Call
 }
+
 //Starts the Rendering Process (has to be seperate function due to AJAX Call being async)
 function startRender(date, ExampleTasks, NamesIn){
     var countTasks = ExampleTasks.length;
