@@ -29,7 +29,7 @@ Draggables = [{
 function drawTable(n_days){
     var scheduler = document.getElementById("scheduler");
     //Declare the Dateheader Object to Inject into the HTML
-    var dateheadertoinject = '<div class="timeframeselector"><div id="delete" title="Delete Item" class="delete" ondragover="onDragOver(event);" ondrop="onDropDelete(event);"><i class="fas fa-disease ill"></i><i>Add Sickness</i></div><div id="delete" title="Delete Item" class="delete"><i class="fas fa-trash delete"></i><i>Delete Item</i></div><div class="timeframe">Week View<i class="fas fa-calendar-day day" title="Week View"></i>Fortnight View<i class="fas fa-calendar-week fortnight" title="Fortnight View"></i>Month View<i class="fas fa-calendar-alt month" title="Month View"></i></div></div><div class="dateheader"><i class="fas fa-angle-left prev"></i><div class="CurrentDate"><a>Database Empty/No Connection</a></div><i class="fas fa-angle-right next"></i></div>';
+    var dateheadertoinject = '<div class="timeframeselector"><div id="delete" title="Delete Item" class="delete" ondragover="onDragOver(event);" ondrop="onDropDelete(event);"><i class="fas fa-disease ill"></i><i>Add Sickness</i></div><div id="delete" title="Delete Item" class="delete"><i class="fas fa-trash delete"></i><i>Delete Item</i></div><div class="timeframe">Week View<i class="fas fa-calendar-day day" title="Week View"></i>Fortnight View<i class="fas fa-calendar-week fortnight" title="Fortnight View"></i>Month View<i class="fas fa-calendar-alt month" title="Month View"></i></div></div><div class="dateheader"><i class="fas fa-angle-left prev"></i><div class="CurrentDate"><input type="date" id="nativedatepicker"><a>Loading...</a></div><i class="fas fa-angle-right next"></i></div>';
     //Create an array of weekdays depending on the number of days inputted to be shown
     WeekdayArray = [];
     var currentWeekday = moment(date).format('ddd');
@@ -274,6 +274,13 @@ function init_button_listener(){
         date = moment().startOf('month');
         //We also need to check which day to start the Names of the Weekdays from since each Month does not specifically start with a Monday.
         var startWeekName = moment(date).format('ddd');
+        start();
+    });
+    document.getElementById('nativedatepicker').addEventListener('input', (e)=>{
+        monthView = 0;
+        deleteTableEntries(1);
+        date = moment(e.target.value,'YYYY-MM-DD').startOf('week');
+        n_days = 7;
         start();
     });
 }
