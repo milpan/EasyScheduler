@@ -1,35 +1,32 @@
 moment.locale();
 //Need a function which counts the number of draggable items and one to populate them
 const init_date = moment();
-var date = init_date.startOf('isoweek');
+var date = init_date.startOf("isoweek");
 //Number of days of the calendar you wish to display
 var n_days = 7;
 //This variable is used to identify wether we are in month view for the next and back buttons
 var monthView = 0;
 var ExampleTasks =[];
 var DistinctNames =[];
-var Weekdays = ['Mon','Tue', 'Wed','Thu','Fri','Sat','Sun'];
+var Weekdays = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
 var countTasks = 0;
 //Define some draggable Tasks (these will later be populated by a MYSQL Call)
 Draggables = [{
     id: 10,
     name: "Prerender Test Task",
-    color: "blue",
     },{
     id: 21,
     name: "Wash Dishes",
-    color: "blue",
     },
     {
     id: 22,
     name: "One more for good luck!",
-    color: "blue",
     }];
 //Function that Draws the Table depending on n_days
 function drawTable(n_days){
     var scheduler = document.getElementById("scheduler");
     //Declare the Dateheader Object to Inject into the HTML
-    var dateheadertoinject = '<div class="timeframeselector"><div id="delete" title="Delete Item" class="delete" ondragover="onDragOver(event);" ondrop="onDropDelete(event);"><i class="fas fa-disease ill"></i><i>Add Sickness</i></div><div id="delete" title="Delete Item" class="delete"><i class="fas fa-trash delete"></i><i>Delete Item</i></div><div class="timeframe">Week View<i class="fas fa-calendar-day day" title="Week View"></i>Fortnight View<i class="fas fa-calendar-week fortnight" title="Fortnight View"></i>Month View<i class="fas fa-calendar-alt month" title="Month View"></i></div></div><div class="dateheader"><i class="fas fa-angle-left prev"></i><div class="CurrentDate"><input type="date" id="nativedatepicker"><a>Loading...</a></div><i class="fas fa-angle-right next"></i></div>';
+    var dateheadertoinject = '<div class="timeframeselector"><div id="addsick" title="Delete Item" class="delete"><i class="fas fa-disease ill"></i><i>Add Sickness</i></div><div id="delete" title="Delete Item" class="delete" ondragover="onDragOver(event);" ondrop="onDropDelete(event);"><i class="fas fa-trash delete"></i><i>Delete Item</i></div><div class="timeframe">Week View<i class="fas fa-calendar-day day" title="Week View"></i>Fortnight View<i class="fas fa-calendar-week fortnight" title="Fortnight View"></i>Month View<i class="fas fa-calendar-alt month" title="Month View"></i></div></div><div class="dateheader"><i class="fas fa-angle-left prev"></i><div class="CurrentDate"><input type="date" id="nativedatepicker"><a><div class="loader"></div></a></div><i class="fas fa-angle-right next"></i></div>';
     //Create an array of weekdays depending on the number of days inputted to be shown
     WeekdayArray = [];
     var currentWeekday = moment(date).format('ddd');
@@ -206,7 +203,7 @@ function hasWhiteSpace(s) {
 
 function saveTasktoSQL(TaskIn){
     var xmlhttp = new XMLHttpRequest();
-    xmlhttp.open("GET", "savetosql.php?q=" + TaskIn["date"] + "&id=" + TaskIn["id"] + "&u=" + TaskIn["assigned_to"] + "&tn=" + TaskIn["name"] + "&col=" + TaskIn["color"], true);
+    xmlhttp.open("GET", "savetosql.php?q=" + TaskIn["date"] + "&id=" + TaskIn["id"] + "&u=" + TaskIn["assigned_to"] + "&tn=" + TaskIn["name"] + "&col=", true);
     xmlhttp.send();
     xmlhttp.onreadystatechange = function(){
         if (this.readyState == 4 && this.status == 200){
@@ -309,7 +306,6 @@ function save_class(RefClass, startDate, element){
     Task = {
     id: itemID,
     name: texttoPopulate,
-    color: "blue",
     assigned_to: user,
     date: taskDate 
     };

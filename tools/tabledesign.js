@@ -3,6 +3,11 @@ This script manages rendering resizable table columns
 */
 
 function start_resize_grid(){
+    //Check to see if the resize div has already been created if so delete it
+    var resizediv = document.getElementById('divider');
+    if(resizediv != null){
+        resizediv.remove();
+    }
     //Get the table in question
     var tbl = document.getElementById('myView');
     resizable_Table(tbl);

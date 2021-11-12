@@ -6,7 +6,7 @@
 .container{
 width: auto;
 height: auto;
-overflow-y: hidden;
+overflow-y: visible;
 justify-content: center;
 align-items: center;
 }
@@ -18,7 +18,7 @@ align-items: center;
 }
 
 .Scheduler{
-    overflow-y: hidden;
+    overflow-y: visible;
     width: auto;
     box-shadow: 0 0.2rem 1rem rgba(0,0,0,0.4) ;
     height: auto;
@@ -53,7 +53,6 @@ align-items: center;
 .timeframeselector{
     float:left;
     display: inline;
-    /*box-shadow: 0 0.2rem 1rem rgba(0,0,0,0.4) ;*/
     align-self: right;
     text-align: right;
     align-content: right;
@@ -93,8 +92,7 @@ align-items: center;
 }
 
 .timeframe i{
-    margin-left: 5px;
-    margin-right: 10px;
+    margin: 0 5px 0 5px;
 }
 
 .origin{
@@ -134,14 +132,14 @@ align-items: center;
     white-space: nowrap;
     width: 30%;
     display: flex;
-    overflow:hidden;
+    overflow:visible;
     text-overflow: ellipsis;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin: 10px 0 10px 0;
     padding: 10px;
     cursor: grab;
     font-size: smaller;
     border-radius: 30px;
+    vertical-align: top;
 }
 
 .item i{
@@ -154,10 +152,7 @@ align-items: center;
     display: flex;
     justify-content: left;
     vertical-align: center;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-left: 7px;
-    padding-right: 10px;
+    padding: 5px 7px 5px 10px;
     width:fit-content;
     cursor: pointer;
     border-radius: 10px;
@@ -204,16 +199,12 @@ align-items: center;
 height: 100%;
 background: inherit;
 display: flex !important;
-/*flex-basis: 100%;
-flex-grow: 1;*/
 }
 
 .empty:hover{
     filter: brightness(95%);
     background-color: #20262D;
     height: 100%;
-    /*flex-basis: 100%;
-    flex-grow: 1;*/
     }
 
 .dateheader{
@@ -232,21 +223,69 @@ justify-content: center;
 text-align: center;
 }
 
-.CurrentDate{
+.item span{
+    display: none;
+    overflow: visible;
+    vertical-align: top !important;
+    background: #3700B3;
+    padding: 40px;
+    position: absolute;
+    top: 30px;
+    width: fit-content;
+    height: fit-content;
+    color: white;
+    text-align: left;
+    border-radius: 5px;
+    box-shadow: 0 0.2rem 1rem rgba(0,0,0,0.4) ;
+}
+
+.item span h1{
+    display: inline;
+    top: 0px !important;
+    vertical-align: top !important;
+    background-color: inherit;
+    color: inherit;
+}
+
+.item span p{
+    vertical-align: top !important;
+    background-color: inherit;
+    color: inherit;
+}
+
+.item:hover span{
+    display: block;
+}
+
+.loader {
+    border: 6px solid #f3f3f3; /* Light grey */
+    border-top: 6px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 10%;
+    height: 10%;
+    animation: spin 2s linear infinite;
+}
+  
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+  
+
+.CurrentDate {
+    vertical-align: center;
     background-color: inherit;
 }
 
 .CurrentDate a{
-    vertical-align: center;
-    background-color: #6200EE;
+    background-color: inherit;
 }
 
 input {
     position: absolute;
     opacity: 0;
-    width: 15%;
+    width: 180px;
     height: 30px;
-    border: 0;
     overflow: hidden;
     cursor: pointer;
   }
@@ -262,14 +301,14 @@ input::-webkit-calendar-picker-indicator {
 
 /* In order for the selection pane */
 .dateheader i {
-    margin-left: 5px;
-    margin-right: 5px;
+    margin: 0 5 0 5;
     vertical-align: center;
     background-color: #6200EE;
     cursor: pointer;
 }
 
 .myView{
+    overflow:visible;
     background: #1E1E1E;
     overflow-x: scroll;
     width: 100%;
@@ -281,6 +320,7 @@ input::-webkit-calendar-picker-indicator {
 }
 
 .myView th{
+    overflow:visible;
 background: #121212;
 color: white;
 font-weight: 500;
@@ -288,6 +328,7 @@ border-left: 1px solid #515151;
 }
 
 .myView td{
+    overflow:visible;
     background: #1E1E1E;
     width: auto;
     border-left: 1px solid #515151;
@@ -302,14 +343,7 @@ border-left: 1px solid #515151;
     border-bottom: 1px solid #515151;
 }
 
-.popup{
-    border-radius: 10px;
-    width: 200px;
-    height: 150px;
-    display: none;
-    background-color: beige;
-    border: 1px solid black;
-}
+
 
 .name{
     font-weight:500;

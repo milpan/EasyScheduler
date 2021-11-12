@@ -6,7 +6,6 @@ $inID = $_REQUEST["id"];
 $inDate = $_REQUEST["q"];
 $user = $_REQUEST["u"];
 $name = $_REQUEST["tn"];
-$inColor = $_REQUEST["col"];
 
 function checkDatabase($link, $inID){
   $sql="SELECT * FROM example where id={$inID}";
