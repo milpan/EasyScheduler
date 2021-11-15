@@ -45,11 +45,6 @@ align-items: center;
 }
 
 
-.divider:hover{
-    background-color: green;
-    width: 10px;
-}
-
 .timeframeselector{
     float:left;
     display: inline;

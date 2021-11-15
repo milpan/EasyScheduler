@@ -10,6 +10,7 @@ function start_resize_grid(){
     }
     //Get the table in question
     var tbl = document.getElementById('myView');
+    console.log(tbl);
     resizable_Table(tbl);
 }
 
@@ -18,12 +19,12 @@ function resizable_Table(table){
     cols = row ? row.children : undefined;
     table.style.overflow = 'scroll';
     if (!cols) return;
-    for (var i=0; i<1; i++){
+    
         var div = createScaleableDiv(table.offsetHeight);
-        cols[i].appendChild(div);
-        cols[i].style.position = 'relative';
+        cols[0].appendChild(div);
+        cols[0].style.position = 'relative';
         setListeners(div);
-    }
+    
 }
 
 //Function to create the scalable div that sits on the Name column
@@ -65,8 +66,10 @@ if(curCol){
         if(nxtColWidth > 30){
             //nxtCol.style.width = (nxtColWidth - (diffX)) + 'px';
             curCol.style.width = (curColWidth + diffX) + 'px';
+            update_width();
         }else{
             nxtCol.style.width = 70 + 'px';
+            update_width();
             //curCol.style.width = curColWidth + 'px';
         }
     }
@@ -75,6 +78,7 @@ if(curCol){
 //Reset the variables once the mouse is lifted
 document.addEventListener('mouseup', function(e){
 var divider = document.getElementById('divider').style.width = "2px";
+update_width();
 curCol = undefined;
 nxtCol = undefined;
 pageX = undefined;
@@ -82,6 +86,14 @@ nxtColWidth = undefined;
 curColWidth = undefined;
 });
 }
+
+//This function updates the width of the draggable div
+function update_width(){
+var table = document.getElementById("myView");
+var divider = document.getElementById("divider");
+divider.style.height = table.offsetHeight + "px";
+}
+
 
 function showPopup(Task){
 

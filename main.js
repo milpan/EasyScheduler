@@ -40,7 +40,7 @@ function drawTable(n_days){
     //Convert our Array into One Big String Ready for Rendering
     var weekdaystring = WeekdayArray.join("");
     //Now to inject the table we wish to render depending on the number of days chosen
-    var tabletoinject = '<table class="myView" id="myView" style="overflow: scroll;"><thead><tr><th style="position: relative;">Name<div style="top: 0px; right: 0px; width: 1px; position: absolute; cursor: col-resize; background-color: slategray; user-select: none; height: 196px;"></div></th>'+weekdaystring+'</tr></table>';
+    var tabletoinject = '<table class="myView" id="myView" style="overflow: scroll;"><thead><tr><th style="position: relative;">Name</th>'+weekdaystring+'</tr></table>';
     var mainInject = dateheadertoinject + tabletoinject;
     scheduler.innerHTML = mainInject;
     //After rendering the table start the button listener
@@ -64,6 +64,7 @@ xmlhttp.onreadystatechange = function(){
         ExampleTasks = JSON.parse(this.responseText);
         getNames(currentDate, ExampleTasks);
         return ExampleTasks;
+
     }
     };
 }
@@ -414,7 +415,6 @@ function startRender(date, ExampleTasks, NamesIn){
     render_Table(NamesIn);
     populate_table(ExampleTasks, date);
     start_resize_grid();
-    
 }
 
 //----Main Decleration----//
