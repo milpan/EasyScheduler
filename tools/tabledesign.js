@@ -10,7 +10,6 @@ function start_resize_grid(){
     }
     //Get the table in question
     var tbl = document.getElementById('myView');
-    console.log(tbl);
     resizable_Table(tbl);
 }
 
@@ -63,7 +62,7 @@ if(curCol){
 
     var diffX = e.pageX - pageX;
     if(nxtCol){
-        console.log( - pageX);
+
         if(nxtColWidth > 30){
             //nxtCol.style.width = (nxtColWidth - (diffX)) + 'px';
             curCol.style.width = (curColWidth + diffX) + 'px';
@@ -80,6 +79,7 @@ if(curCol){
 document.addEventListener('mouseup', function(e){
 var divider = document.getElementById('divider').style.width = "2px";
 update_width();
+//Reset the Focus Variables
 curCol = undefined;
 nxtCol = undefined;
 pageX = undefined;

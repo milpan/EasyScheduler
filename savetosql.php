@@ -33,7 +33,7 @@ function appendDraggable($link, $inID, $inDate, $user, $name){
 
 //Uses a prepared statement to save the draggable to the database
 function saveDraggable($link, $inID, $inDate, $user, $name){
-$sql = "INSERT INTO example (id, name, assigned_to, date) VALUES (?,?,?,?,?)";
+$sql = "INSERT INTO example (id, name, assigned_to, date) VALUES (?,?,?,?)";
 if($stmt = mysqli_prepare($link, $sql)){
   $inDate = date("Y-m-d", strtotime($inDate));
 

@@ -17,6 +17,11 @@ align-items: center;
     border-radius: 2px;
 }
 
+@keyframes fadein {
+    from { opacity: 0}
+    to   { opacity: 1}
+  }
+
 .Scheduler{
     overflow-y: visible;
     width: auto;
@@ -310,6 +315,7 @@ input::-webkit-calendar-picker-indicator {
 }
 
 .myView{
+    animation: fadein 0.5s;
     overflow:visible;
     background: #1E1E1E;
     overflow-x: scroll;

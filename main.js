@@ -194,13 +194,15 @@ function hasWhiteSpace(s) {
   }
 
 function saveTasktoSQL(TaskIn){
+    console.log(TaskIn);
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.open("POST", "savetosql.php", true);
     xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xmlhttp.send("q=" + TaskIn["date"] + "&id=" + TaskIn["id"] + "&u=" + TaskIn["assigned_to"] + "&tn=" + TaskIn["name"]);
     xmlhttp.onreadystatechange = function(){
         if (this.readyState == 4 && this.status == 200){
-            //If the php call is succesful then decode the Json of the Tasks
+            //If the php call is succesful then return a successful call
+            return 1;
         }
         };
 }
@@ -283,8 +285,7 @@ var targetparent = target.parentElement;
 var targettarget = targetparent.parentElement;
 if(targettarget.getAttribute("class")=="empty"){
 save_class(targettarget.getAttribute('username'),date, targetparent);
-}
-}
+}}
 
 //Function which pushes tasks to the Array once they have been dragged
 function save_class(RefClass, startDate, element){
