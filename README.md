@@ -16,7 +16,7 @@ Getting started using the drag and drop functionality is simple and follows a si
 ```html
 <div id="itembox" class="itembox"></div>
 ```
-See the example in index.html for more examples of use-cases and functionality. Make sure to include Moment.JS and relevant JS scripts in your HTML file.
+See the example in index.html for more examples of use-cases and functionality. Make sure to include Moment.JS and relevant JS scripts in your HTML file. To speed up rendering of the calculator we reccommend that you host both the fonts and momentJS!
 ## Contributions
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 ### Upcoming Features
