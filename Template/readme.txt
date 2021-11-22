@@ -1,0 +1,1 @@
+This is where we store the SQL Templates for the Scheduler
