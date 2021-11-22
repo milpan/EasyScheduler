@@ -20,7 +20,7 @@ function checkDatabase($link, $inID){
 }
 
 //This function is responsible for updating draggables if they already have been added
-function appendDraggable($link, $inID, $inDate, $user, $name, $inColor){
+function appendDraggable($link, $inID, $inDate, $user, $name){
   $sql = "UPDATE example SET assigned_to = ?, date = ?, name=? WHERE id=?";
   if($stmt = mysqli_prepare($link, $sql)){
     $inDate = date("Y-m-d", strtotime($inDate));
@@ -32,12 +32,12 @@ function appendDraggable($link, $inID, $inDate, $user, $name, $inColor){
 }
 
 //Uses a prepared statement to save the draggable to the database
-function saveDraggable($link, $inID, $inDate, $user, $name, $inColor){
-$sql = "INSERT INTO example (id, name, color, assigned_to, date) VALUES (?,?,?,?,?)";
+function saveDraggable($link, $inID, $inDate, $user, $name){
+$sql = "INSERT INTO example (id, name, assigned_to, date) VALUES (?,?,?,?,?)";
 if($stmt = mysqli_prepare($link, $sql)){
   $inDate = date("Y-m-d", strtotime($inDate));
 
-  $stmt->bind_param("issss", $inID, $trimname, $inColor, $user, $inDate);
+  $stmt->bind_param("isss", $inID, $trimname, $user, $inDate);
   $trimname = trim($name);
   $stmt->execute();
   $stmt->close();
@@ -50,10 +50,10 @@ if($inID != null && $inDate != null && $user != null && $name != null){
   //Now Check if the Task has already been added to the Database, if so we need to alter
   if(checkDatabase($link, $inID) == 1){
     //Item has already been added to the database, instead update the corrosponding record
-    appendDraggable($link, $inID, $inDate, $user, $name, $inColor);
+    appendDraggable($link, $inID, $inDate, $user, $name);
   }else{
     //If the item has not already been added to the database
-    saveDraggable($link, $inID, $inDate, $user, $name, $inColor);
+    saveDraggable($link, $inID, $inDate, $user, $name);
   }
 
 }

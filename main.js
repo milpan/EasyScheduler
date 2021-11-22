@@ -16,7 +16,7 @@ var countTasks = 0;
 function drawTable(n_days){
     var scheduler = document.getElementById("scheduler");
     //Declare the Dateheader Object to Inject into the HTML
-    var dateheadertoinject = '<div class="timeframeselector"><div class="toolbar"><div id="addsick" title="Add Sickness" class="delete" onDrag="onDragStartSickness();"><i class="fas fa-disease ill"></i><i>Add Sickness</i></div><div id="delete" title="Delete Item" class="delete" ondragover="onDragOver(event);" ondrop="onDropDelete(event);"><i class="fas fa-trash delete"></i><i>Delete Item</i></div></div><div class="timeframe">Week View<i class="fas fa-calendar-day day" title="Week View"></i>Fortnight View<i class="fas fa-calendar-week fortnight" title="Fortnight View"></i>Month View<i class="fas fa-calendar-alt month" title="Month View"></i></div></div><div class="dateheader"><i class="fas fa-angle-left prev"></i><div class="CurrentDate"><input type="date" id="nativedatepicker"><a><div class="loader"></div></a></div><i class="fas fa-angle-right next"></i></div>';
+    var dateheadertoinject = '<div class="timeframeselector"><div class="toolbar"><div id="addsick" title="Add Sickness" class="delete" draggable="true" ondragstart="onDragStart(event);"><i id="addsick" class="fas fa-disease ill"></i><i>Add Sickness</i></div><div id="delete" title="Delete Item" class="delete" ondragover="onDragOver(event);" ondrop="onDropDelete(event);"><i class="fas fa-trash delete"></i><i>Delete Item</i></div></div><div class="timeframe">Week View<i class="fas fa-calendar-day day" title="Week View"></i>Fortnight View<i class="fas fa-calendar-week fortnight" title="Fortnight View"></i>Month View<i class="fas fa-calendar-alt month" title="Month View"></i></div></div><div class="dateheader"><i class="fas fa-angle-left prev"></i><div class="CurrentDate"><input type="date" id="nativedatepicker"><a><div class="loader"></div></a></div><i class="fas fa-angle-right next"></i></div>';
     //Create an array of weekdays depending on the number of days inputted to be shown
     WeekdayArray = [];
     var currentWeekday = moment(date).format('ddd');
@@ -44,8 +44,9 @@ currentDate -> the current date of which the calendar is focused
 number_days -> number of days of which to obtain the tasks
 */
 var xmlhttp = new XMLHttpRequest();
-xmlhttp.open("GET", "mysql_support.php?q=" + currentDate.format("DD-MM-YYYY") + "&d=" + number_days, true);
-xmlhttp.send();
+xmlhttp.open("POST", "mysql_support.php", true);
+xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+xmlhttp.send("q=" + currentDate.format("DD-MM-YYYY") + "&d=" + number_days);
 xmlhttp.onreadystatechange = function(){
     if (this.readyState == 4 && this.status == 200){
         //If the php call is succesfull then decode the Json of the Tasks
@@ -85,7 +86,7 @@ function getElements(){
         if (this.readyState == 4 && this.status == 200){
             //If the php call is succesfull then decode the Json of the Tasks
             var countTasks = this.responseText; 
-            renderItemBox(Draggables, countTasks);
+            getDraggables(countTasks);
         }
         };
 }
@@ -194,8 +195,9 @@ function hasWhiteSpace(s) {
 
 function saveTasktoSQL(TaskIn){
     var xmlhttp = new XMLHttpRequest();
-    xmlhttp.open("GET", "savetosql.php?q=" + TaskIn["date"] + "&id=" + TaskIn["id"] + "&u=" + TaskIn["assigned_to"] + "&tn=" + TaskIn["name"] + "&col=", true);
-    xmlhttp.send();
+    xmlhttp.open("POST", "savetosql.php", true);
+    xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xmlhttp.send("q=" + TaskIn["date"] + "&id=" + TaskIn["id"] + "&u=" + TaskIn["assigned_to"] + "&tn=" + TaskIn["name"]);
     xmlhttp.onreadystatechange = function(){
         if (this.readyState == 4 && this.status == 200){
             //If the php call is succesful then decode the Json of the Tasks
@@ -287,11 +289,11 @@ console.log("Succesfully updated the item");
 
 //Function which pushes tasks to the Array once they have been dragged
 function save_class(RefClass, startDate, element){
+    console.log("REFCLASS: "+element.innerHTML);
     var inStartDate = moment(startDate);
     var id = RefClass.match(/\d+/g)[0];
     var user = RefClass.match(/[a-zA-Z]+/g).join(" ");
     var texttoPopulate = element.innerHTML;
-    console.log(texttoPopulate);
     var itemID = element.id.match(/\d+/g)[0];
     var taskDate = inStartDate.add(id, 'days').format('DD-MM-YYYY');
     Task = {
@@ -300,7 +302,18 @@ function save_class(RefClass, startDate, element){
     assigned_to: user,
     date: taskDate 
     };
+    console.log(Task);
     saveTasktoSQL(Task);
+}
+
+function resetSicknessDrag(){
+    //This function resets the Sickness Button after a Sickness has been dragged to the grid
+    var toolbar = document.getElementsByClassName("toolbar")[0];
+    console.log(toolbar.innerHTML);
+    //Define the HTML to reinject after the sickness has been dragged
+    var injectionHTML = '<div id="addsick" title="Add Sickness" class="delete" draggable="true" ondragstart="onDragStart(event);"><i id="addsick" class="fas fa-disease ill"></i><i>Add Sickness</i></div>';
+    var existingHTML = toolbar.innerHTML;
+    toolbar.innerHTML = injectionHTML + existingHTML;
 }
 
 //Function that handles the drop event of items onto the calendar
@@ -310,15 +323,27 @@ function onDrop(event){
     .getData('text');
     //Select our dragable element with the ID
     const draggableElement = document.getElementById(id);
-    draggableElement.style.backgroundColor = "#3700B3"
+    const newdragger = draggableElement;
+    newdragger.style.backgroundColor = "#3700B3"
     //Get our target
     const dropzone = event.target;
     //Check our target is not another draggable item
     if(dropzone.className == "empty"){
+    //Check if were dragging a sickness onto the grid
+    if(draggableElement.id == "addsick"){
+        newdragger.setAttribute('class','sickness');
+        newdragger.setAttribute('id', 'sickness-23');
+        newdragger.setAttribute('classname', 'sickness');
+        newdragger.innerHTML = "Unwell";
+        save_class(dropzone.getAttribute('username'), date, newdragger);
+        dropzone.appendChild(newdragger);
+        resetSicknessDrag();
+    } else{
     //Call the function to handle storing dragged tasks
     save_class(dropzone.getAttribute('username'), date, draggableElement);
     //Put our draggable div into the dropzone
     dropzone.appendChild(draggableElement);
+    }
     }
     //Reset our data Object
     event
@@ -362,34 +387,6 @@ function onDragStart(event){
     event.currentTarget.style.backgroundColor = '#5E35B1';
 }
 
-//This function is responsible for when a user drags a task back onto the itembox
-function dropItemBox(event){
-    const id = event
-    .dataTransfer
-    .getData('text');
-    //Select our dragable element with the ID
-    const draggableElement = document.getElementById(id);
-    draggableElement.style.backgroundColor = "#3700B3"
-    //Get our target
-    const dropzone = event.target;
-    //Check our target is not another draggable item
-    if(dropzone.className == "dropzone"){
-    //Call the function to handle storing dragged tasks
-    save_class("", "0000-00-00", draggableElement);
-    //Put our draggable div into the dropzone
-    dropzone.appendChild(draggableElement);
-    }
-    //Reset our data Object
-    event
-    .dataTransfer.clearData();
-    update_width();
-}
-
-//Function to handle the dragging of sickness and vacations
-function onDragStartSickness(event){
-    event.dataTransfer.setData('text/plain', 'Sickness')
-    event.currentTarget.style.color = 'white';
-}
 
 //Function which handles the deleting of items once myView is changed
 function deleteTableEntries($condition = 0){
@@ -437,7 +434,5 @@ var countTasks = getElements();
 if(n_days == "30" || n_days == "31"){
     monthView = 1;
 }
-var countTasks = getElements();
-getDraggables();
 drawTable(n_days);
 start();

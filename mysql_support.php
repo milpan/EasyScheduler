@@ -1,8 +1,8 @@
 <?php
 //This php script is responsible for retrieving tasks on the selected calendar timeframe
 require "php_config.php";
-$inDate = $_REQUEST["q"];
-$n_days = $_REQUEST["d"];
+$inDate = $_POST["q"];
+$n_days = $_POST["d"];
 global $outArray;
 $outArray = array();
 

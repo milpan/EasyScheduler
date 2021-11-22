@@ -21,6 +21,5 @@ function obtainTasks($link){
 }
 
 //Obtain the requests from Javascript
-
 obtainTasks($link);
 ?>
