@@ -5,7 +5,7 @@ global $names;
 $names = array();
 
 function getNames($link){
-  $sql = "SELECT DISTINCT(assigned_to) FROM example";
+  $sql = "SELECT DISTINCT(assigned_to) FROM example WHERE assigned_to <> ''";
   if($result = $link->query($sql)){
     while($row = $result->fetch_assoc()){
       $names[] = $row["assigned_to"];

@@ -27,6 +27,13 @@ align-items: center;
 .item a{
     text-align: center;
 }
+
+.toolbar{
+    justify-content: left;
+    display: flex;
+
+}
+
 /* In order for the drag and drop example pane*/
 .itembox{
     border: 1px solid black;

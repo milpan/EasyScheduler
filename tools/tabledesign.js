@@ -63,6 +63,7 @@ if(curCol){
 
     var diffX = e.pageX - pageX;
     if(nxtCol){
+        console.log( - pageX);
         if(nxtColWidth > 30){
             //nxtCol.style.width = (nxtColWidth - (diffX)) + 'px';
             curCol.style.width = (curColWidth + diffX) + 'px';

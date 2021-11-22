@@ -11,22 +11,12 @@ var DistinctNames =[];
 var Weekdays = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
 var countTasks = 0;
 //Define some draggable Tasks (these will later be populated by a MYSQL Call)
-Draggables = [{
-    id: 10,
-    name: "Prerender Test Task",
-    },{
-    id: 21,
-    name: "Wash Dishes",
-    },
-    {
-    id: 22,
-    name: "One more for good luck!",
-    }];
+
 //Function that Draws the Table depending on n_days
 function drawTable(n_days){
     var scheduler = document.getElementById("scheduler");
     //Declare the Dateheader Object to Inject into the HTML
-    var dateheadertoinject = '<div class="timeframeselector"><div id="addsick" title="Delete Item" class="delete"><i class="fas fa-disease ill"></i><i>Add Sickness</i></div><div id="delete" title="Delete Item" class="delete" ondragover="onDragOver(event);" ondrop="onDropDelete(event);"><i class="fas fa-trash delete"></i><i>Delete Item</i></div><div class="timeframe">Week View<i class="fas fa-calendar-day day" title="Week View"></i>Fortnight View<i class="fas fa-calendar-week fortnight" title="Fortnight View"></i>Month View<i class="fas fa-calendar-alt month" title="Month View"></i></div></div><div class="dateheader"><i class="fas fa-angle-left prev"></i><div class="CurrentDate"><input type="date" id="nativedatepicker"><a><div class="loader"></div></a></div><i class="fas fa-angle-right next"></i></div>';
+    var dateheadertoinject = '<div class="timeframeselector"><div class="toolbar"><div id="addsick" title="Add Sickness" class="delete" onDrag="onDragStartSickness();"><i class="fas fa-disease ill"></i><i>Add Sickness</i></div><div id="delete" title="Delete Item" class="delete" ondragover="onDragOver(event);" ondrop="onDropDelete(event);"><i class="fas fa-trash delete"></i><i>Delete Item</i></div></div><div class="timeframe">Week View<i class="fas fa-calendar-day day" title="Week View"></i>Fortnight View<i class="fas fa-calendar-week fortnight" title="Fortnight View"></i>Month View<i class="fas fa-calendar-alt month" title="Month View"></i></div></div><div class="dateheader"><i class="fas fa-angle-left prev"></i><div class="CurrentDate"><input type="date" id="nativedatepicker"><a><div class="loader"></div></a></div><i class="fas fa-angle-right next"></i></div>';
     //Create an array of weekdays depending on the number of days inputted to be shown
     WeekdayArray = [];
     var currentWeekday = moment(date).format('ddd');
@@ -333,6 +323,7 @@ function onDrop(event){
     //Reset our data Object
     event
     .dataTransfer.clearData();
+    update_width();
 }
 
 //Handler for once a task has been dragged on the Delete Item
@@ -369,6 +360,29 @@ function onDragStart(event){
     //Also set the background colour of the dragged item
     //and the text to black
     event.currentTarget.style.backgroundColor = '#5E35B1';
+}
+
+//This function is responsible for when a user drags a task back onto the itembox
+function dropItemBox(event){
+    const id = event
+    .dataTransfer
+    .getData('text');
+    //Select our dragable element with the ID
+    const draggableElement = document.getElementById(id);
+    draggableElement.style.backgroundColor = "#3700B3"
+    //Get our target
+    const dropzone = event.target;
+    //Check our target is not another draggable item
+    if(dropzone.className == "dropzone"){
+    //Call the function to handle storing dragged tasks
+    save_class("", "0000-00-00", draggableElement);
+    //Put our draggable div into the dropzone
+    dropzone.appendChild(draggableElement);
+    }
+    //Reset our data Object
+    event
+    .dataTransfer.clearData();
+    update_width();
 }
 
 //Function to handle the dragging of sickness and vacations
@@ -424,6 +438,6 @@ if(n_days == "30" || n_days == "31"){
     monthView = 1;
 }
 var countTasks = getElements();
-renderItemBox(Draggables, countTasks);
+getDraggables();
 drawTable(n_days);
 start();
