@@ -1,3 +1,4 @@
+
 moment.locale();
 //Need a function which counts the number of draggable items and one to populate them
 const init_date = moment();
@@ -82,7 +83,7 @@ function getElements(){
         if (this.readyState == 4 && this.status == 200){
             //If the php call is succesfull then decode the Json of the Tasks
             var countTasks = this.responseText; 
-            
+
             getDraggables(countTasks);
         }
         };
@@ -351,13 +352,17 @@ function onDrop(event){
     save_class(dropzone.getAttribute('username'), date, draggableElement);
     //Put our draggable div into the dropzone
     dropzone.appendChild(draggableElement);
-    }
+    getElements();
+    } }
+    if(dropzone.className == "dropzone"){
+        console.log("In The dropzone");
+        dropzone.appendChild(draggableElement);
     }
     //Reset our data Object
     event
     .dataTransfer.clearData();
     update_width();
-}
+    }
 
 //Handler for once a task has been dragged on the Delete Item
 function onDropDelete(event){
