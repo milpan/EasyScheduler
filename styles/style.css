@@ -2,43 +2,41 @@
     font-family: 'Roboto';
     background-color: #20262D;
 }
-
+h1{
+    color: white;
+}
 .container{
+    background-color: inherit;
 width: auto;
 height: auto;
 overflow-y: visible;
 justify-content: center;
 align-items: center;
 }
-
 .dropzone{
+    width:min-content;
     flex-basis: 100%;
     flex-grow: 1;
     border-radius: 2px;
 }
-
 @keyframes fadein {
-    from { opacity: 0}
-    to   { opacity: 1}
-  }
-
+from { opacity: 0}
+to   { opacity: 1}
+}
 .Scheduler{
+    background-color: inherit;
     overflow-y: visible;
     width: auto;
-    box-shadow: 0 0.2rem 1rem rgba(0,0,0,0.4) ;
     height: auto;
 }
-
 .item a{
     text-align: center;
 }
-
 .toolbar{
     justify-content: left;
     display: flex;
 
 }
-
 /* In order for the drag and drop example pane*/
 .itembox{
     border: 1px solid black;
@@ -49,14 +47,11 @@ align-items: center;
     box-shadow: 0 0.2rem 1rem rgba(0,0,0,0.4) ;
     padding: 10px;
 }
-
 .timeframe i{
     cursor: pointer;
     background: inherit;
     color: white;
 }
-
-
 .timeframeselector{
     float:left;
     display: inline;
@@ -67,7 +62,6 @@ align-items: center;
     padding-bottom: 8px;
     width: 100%;
 }
-
 .sickness{
     background: repeating-linear-gradient(
         -45deg,
@@ -84,7 +78,6 @@ align-items: center;
     text-overflow: ellipsis;
     font-size: 0px;
 }
-
 .timeframe{
     float: right;
     display: inline;
@@ -97,11 +90,9 @@ align-items: center;
     padding-bottom: 10px;
     border-radius: 30px;
 }
-
 .timeframe i{
     margin: 0 5px 0 5px;
 }
-
 .origin{
     background-color: inherit;
     flex-basis: 100%;
@@ -109,14 +100,12 @@ align-items: center;
     display: flex;
     padding: 10px;
 }
-
 .dropzone h1{
     vertical-align: top;
     font-size: 10pt;
     background-color: inherit;
     color: white;
 }
-
 .tooltip{
     font-size: 7pt;
     width: 100%;
@@ -127,11 +116,22 @@ align-items: center;
     bottom: 0;
 }
 
+@media screen and (max-width: 425px) {
+    .tooltip {
+    margin: auto;
+    width: 100%;
+    float: none;
+    left: -10%;
+    position: absolute;
+    display: flex;
+      justify-content: center;
+    flex-wrap: wrap;
+  }
+}
 .name{
     color: white;
     background: inherit;
 }
-
 .item{
     flex: 1;
     background: #3700B3;
@@ -148,11 +148,10 @@ align-items: center;
     border-radius: 30px;
     vertical-align: top;
 }
-
 .item i{
-    background-color: inherit;
+    background-color: rgba(76, 175, 80, 0.0);
+    z-index: 1000;
 }
-
 .delete{
     background: #6200EE !important;
     color: white;
@@ -164,7 +163,6 @@ align-items: center;
     cursor: pointer;
     border-radius: 10px;
 }
-
 .delete i{
     padding-top:1px;
     font-style: normal;
@@ -174,7 +172,6 @@ align-items: center;
     color: white;
     text-align: left;
 }
-
 .holiday{
     background: repeating-linear-gradient(
         -45deg,
@@ -191,29 +188,25 @@ align-items: center;
     text-overflow: ellipsis;
     font-size: 0px;
 }
-
 .item:hover{
     align-content: center;
     transform:scale(1.1);
 }
-
 .dropzone{
+    width: 80%;
     background-color: inherit;
     padding: 10px;
 }
-
 .empty{
 height: 100%;
 background: inherit;
 display: flex !important;
 }
-
 .empty:hover{
-    filter: brightness(95%);
-    background-color: #20262D;
-    height: 100%;
-    }
-
+filter: brightness(95%);
+background-color: #20262D;
+height: 100%;
+}
 .dateheader{
 width: 100%;
 border-radius: 10px 10px 0px 0px;
@@ -229,7 +222,6 @@ align-content: center;
 justify-content: center;
 text-align: center;
 }
-
 .item span{
     display: none;
     overflow: visible;
@@ -245,7 +237,6 @@ text-align: center;
     border-radius: 5px;
     box-shadow: 0 0.2rem 1rem rgba(0,0,0,0.4) ;
 }
-
 .item span h1{
     display: inline;
     top: 0px !important;
@@ -253,17 +244,14 @@ text-align: center;
     background-color: inherit;
     color: inherit;
 }
-
 .item span p{
     vertical-align: top !important;
     background-color: inherit;
     color: inherit;
 }
-
 .item:hover span{
     display: block;
 }
-
 .loader {
     border: 6px solid #f3f3f3; /* Light grey */
     border-top: 6px solid #3498db; /* Blue */
@@ -272,31 +260,25 @@ text-align: center;
     height: 10%;
     animation: spin 2s linear infinite;
 }
-  
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
-  
-
 .CurrentDate {
     vertical-align: center;
     background-color: inherit;
 }
-
 .CurrentDate a{
     background-color: inherit;
 }
-
 input {
-    position: absolute;
-    opacity: 0;
-    width: 180px;
-    height: 30px;
-    overflow: hidden;
-    cursor: pointer;
-  }
-
+position: absolute;
+opacity: 0;
+width: 180px;
+height: 30px;
+overflow: hidden;
+cursor: pointer;
+}
 input::-webkit-calendar-picker-indicator {
     position: absolute;
     top: -150%;
@@ -304,8 +286,7 @@ input::-webkit-calendar-picker-indicator {
     width: 300%;
     height: 300%;
     cursor: pointer;
-  }
-
+}
 /* In order for the selection pane */
 .dateheader i {
     margin: 0 5 0 5;
@@ -313,7 +294,6 @@ input::-webkit-calendar-picker-indicator {
     background-color: #6200EE;
     cursor: pointer;
 }
-
 .myView{
     animation: fadein 0.5s;
     overflow:visible;
@@ -326,15 +306,13 @@ input::-webkit-calendar-picker-indicator {
     border-collapse: collapse;
     box-shadow: 0 0.2rem 1rem rgba(0,0,0,0.4) ;
 }
-
 .myView th{
-    overflow:visible;
+    overflow:hidden;
 background: #121212;
 color: white;
 font-weight: 500;
 border-left: 1px solid #515151;
 }
-
 .myView td{
     overflow:visible;
     background: #1E1E1E;
@@ -342,7 +320,6 @@ border-left: 1px solid #515151;
     border-left: 1px solid #515151;
     height: inherit;
 }
-
 .myView thead tr{
     background: #1E1E1E;
     height: 1px;
@@ -350,9 +327,6 @@ border-left: 1px solid #515151;
     border-top: 1px solid #515151;
     border-bottom: 1px solid #515151;
 }
-
-
-
 .name{
     font-weight:500;
     text-align: center;

@@ -21,7 +21,6 @@ function drawTable(n_days){
     WeekdayArray = [];
     var currentWeekday = moment(date).format('ddd');
     var TempWeekdays = [];
-
     //Get the index of the currentWeekday in the Weekdays array
     var toStartFrom = Weekdays.indexOf(currentWeekday);
     for(var i=toStartFrom; i<n_days+toStartFrom; i++){
@@ -55,9 +54,7 @@ xmlhttp.onreadystatechange = function(){
         ExampleTasks = JSON.parse(this.responseText);
         getNames(currentDate, ExampleTasks);
         return ExampleTasks;
-
-    }
-    };
+    }};
 }
 
 //This function calls a PHP Script which obtains the Distinct Names from the SQL Database and
@@ -75,7 +72,6 @@ function getNames(currentDate, ExampleTasks){
             startRender(currentDate, ExampleTasks, DistinctNames);
         }};
 }
-
 
 //This function is responsible for obtaining the number of elements in the SQL array to allow for new ID's of draggables SPECIAL FUNC which runs the itembox draggable once its got counttasks.
 function getElements(){
@@ -106,9 +102,9 @@ for (var i=0; i<Tasks.length; i++){
         var CelltoPopulate = Name+DaysDiff;
         var CelltoPopulate = CelltoPopulate.replace(/-/g, "");
         createCell(CelltoPopulate, Task);
-    }
+    }}
 }
-}
+
 //Function which assigns a task to a specific cell ID
 function createCell(cellID, Task){
 /*
@@ -131,12 +127,16 @@ if(taskName == "Holiday"){
     div.setAttribute('class', 'holiday');
     div.setAttribute('className', 'holiday');
     div.setAttribute('id', "holiday-"+taskID);
+    div.setAttribute('draggable', 'true');
+    div.setAttribute('ondragstart', 'onDragStart(event)');
     refdiv.appendChild(div);
     countTasks += 1;
 }else if(taskName == "Unwell"){
     div.setAttribute('class', 'sickness');
     div.setAttribute('className', 'sickness');
     div.setAttribute('id', "sickness-"+taskID);
+    div.setAttribute('ondragstart', 'onDragStart(event)');
+    div.setAttribute('draggable', 'true');
     refdiv.appendChild(div);
     countTasks += 1;
 }
@@ -184,14 +184,12 @@ row = tbl.insertRow(tbl.rows.length),   // append table row
 i;
 for(i=0; i<tbl.rows[0].cells.length; i++){
 createInitialCell(row.insertCell(i), NamesIn[j], i);
-}
-}
-}
+}}}
 
 //This function checks if a string has any empty spaces for populating Names in format 'First Name-Last Name'
 function hasWhiteSpace(s) {
     return s.indexOf(' ') >= 0;
-  }
+}
 
 function saveTasktoSQL(TaskIn){
     console.log(TaskIn);
@@ -304,6 +302,18 @@ function save_class(RefClass, startDate, element){
     saveTasktoSQL(Task);
 }
 
+//Function which Queries the UserAgent
+const deviceType = () => {
+    const ua = navigator.userAgent;
+    if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
+        return "tablet";
+    }
+    else if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(ua)) {
+        return "mobile";
+    }
+    return "desktop";
+};
+
 function resetSicknessDrag(){
     //This function resets the Sickness Button after a Sickness has been dragged to the grid
     var toolbar = document.getElementsByClassName("toolbar")[0];
@@ -354,6 +364,7 @@ function onDropDelete(event){
     .dataTransfer
     .getData('text');
     var newid = id.match(/\d+/g)[0];
+    console.log("DELETE NUMERO" + newid);
     //Select our dragable element with the ID
     const draggableElement = document.getElementById(id);
     //Confirm the user wants to delete the item from the Scheduler
@@ -402,8 +413,7 @@ function deleteTableEntries($condition = 0){
             tbl.deleteRow(-1);
         }
         drawTable(n_days);
-    }
-    }
+    }}
 
 //Stop the default dragover event
 function onDragOver(event){
@@ -413,7 +423,6 @@ function onDragOver(event){
 //Main function to start the scheduler
 function start(){
     var ExampleTasks = obtainTasks(date,n_days);
-    //startRender() is called after the Async AJAX Call
 }
 
 //Starts the Rendering Process (has to be seperate function due to AJAX Call being async)
@@ -422,6 +431,7 @@ function startRender(date, ExampleTasks, NamesIn){
     setCalendarDate(date);
     render_Table(NamesIn);
     populate_table(ExampleTasks, date);
+    //mobileTooltip();
     start_resize_grid();
 }
 
@@ -432,4 +442,5 @@ if(n_days == "30" || n_days == "31"){
     monthView = 1;
 }
 drawTable(n_days);
+
 start();
