@@ -283,13 +283,11 @@ var targetparent = target.parentElement;
 var targettarget = targetparent.parentElement;
 if(targettarget.getAttribute("class")=="empty"){
 save_class(targettarget.getAttribute('username'),date, targetparent);
-console.log("Succesfully updated the item");
 }
 }
 
 //Function which pushes tasks to the Array once they have been dragged
 function save_class(RefClass, startDate, element){
-    console.log("REFCLASS: "+element.innerHTML);
     var inStartDate = moment(startDate);
     var id = RefClass.match(/\d+/g)[0];
     var user = RefClass.match(/[a-zA-Z]+/g).join(" ");
@@ -302,14 +300,12 @@ function save_class(RefClass, startDate, element){
     assigned_to: user,
     date: taskDate 
     };
-    console.log(Task);
     saveTasktoSQL(Task);
 }
 
 function resetSicknessDrag(){
     //This function resets the Sickness Button after a Sickness has been dragged to the grid
     var toolbar = document.getElementsByClassName("toolbar")[0];
-    console.log(toolbar.innerHTML);
     //Define the HTML to reinject after the sickness has been dragged
     var injectionHTML = '<div id="addsick" title="Add Sickness" class="delete" draggable="true" ondragstart="onDragStart(event);"><i id="addsick" class="fas fa-disease ill"></i><i>Add Sickness</i></div>';
     var existingHTML = toolbar.innerHTML;
@@ -363,11 +359,11 @@ function onDropDelete(event){
     if(confirm("Are you sure you wish to delete this item from the Scheduler?")){
         //Call the PHP script to delete target from the SQL database
         var xmlhttp = new XMLHttpRequest();
-        xmlhttp.open("GET", "deletefromsql.php?q=" + newid, true);
-        xmlhttp.send();
+        xmlhttp.open("POST", "deletefromsql.php", true);
+        xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xmlhttp.send("q="+ newid);
         xmlhttp.onreadystatechange = function(){
             if (this.readyState == 4 && this.status == 200){
-                console.log("Task has been succesfully deleted...")
                 draggableElement.remove();
             }
             };

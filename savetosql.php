@@ -2,10 +2,10 @@
 //This php script is responsible for saving the draggable tasks to the Database
 require "php_config.php";
 
-$inID = $_REQUEST["id"];
-$inDate = $_REQUEST["q"];
-$user = $_REQUEST["u"];
-$name = $_REQUEST["tn"];
+$inID = $_POST["id"];
+$inDate = $_POST["q"];
+$user = $_POST["u"];
+$name = $_POST["tn"];
 
 function checkDatabase($link, $inID){
   $sql="SELECT * FROM example where id={$inID}";
