@@ -4,6 +4,9 @@ require "php_config.php";
 global $outArray;
 $outArray = array();
 
+
+
+
 function obtainTasks($link){
     global $outArray;
     //Subtract 1 from the call so we dont get next Mondays Tasks

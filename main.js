@@ -82,6 +82,7 @@ function getElements(){
         if (this.readyState == 4 && this.status == 200){
             //If the php call is succesfull then decode the Json of the Tasks
             var countTasks = this.responseText; 
+            
             getDraggables(countTasks);
         }
         };
@@ -331,7 +332,7 @@ function onDrop(event){
     //Select our dragable element with the ID
     const draggableElement = document.getElementById(id);
     const newdragger = draggableElement;
-    newdragger.style.backgroundColor = "#3700B3"
+    newdragger.style.backgroundColor = "#3700B3";
     //Get our target
     const dropzone = event.target;
     //Check our target is not another draggable item
