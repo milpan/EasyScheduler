@@ -41,14 +41,31 @@
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
                 </div>
+                <hr class="edititemhr">
                 <input type="text" id="tasknameedit" class="form-control" placeholder="Task Name" aria-label="Task Name" aria-describedby="basic-addon1">
+                
                 <br>
                 <br>
+                <hr class="edititemhr">
                     <textarea class="form-control" id="taskdescedit" rows="3"></textarea>
                 <br>
                 <input type="text" class="form-control" id="assignededit" placeholder="Assigned To" aria-label="Assigned To" aria-describedby="basic-addon1">
                 <br>
                 <br>
+                <div class="editdatepickerdiv">
+                <input type="date" id="editdate">
+            </div>
+                <br>
+                <br>
+                <hr class="edititemhr">
+                <label>Editable Task?</label>
+                <label id="switchedit" class="switch">
+                    <input id="taskeditable" type="checkbox">
+                    <span id="taskeditableround" class="slider round"></span>
+                  </label>
+                  <br>
+                  <br>
+
                 <button type="submit" class="btn btn-primary" onclick="submitedit();">Update</button>
               </div>
           </form>

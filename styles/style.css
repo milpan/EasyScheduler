@@ -270,7 +270,10 @@ to   { opacity: 1}
     cursor:pointer;
 }
 .closebutton:hover i{
-    color:darkred !important;
+    color:darkred;
+}
+.closebutton:active i{
+    color:#380000;
 }
 .closebutton{
     background-color: #1E1E1E;
@@ -308,12 +311,11 @@ to   { opacity: 1}
 .edititem{
     position: fixed;
     visibility:hidden;
+    content-visibility: auto;
     width:300px;
     height: fit-content;
     top: 50%;
     left: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
     z-index: 1000;
     background-color: #3700B3;
     border-radius: 10px;
@@ -328,6 +330,9 @@ to   { opacity: 1}
     width: 100%;
     height: max-content;
 
+}
+.editdatepickerdiv{
+font-size: small;
 }
 .edititem form button{
     background-color: #6200EE;
@@ -419,3 +424,67 @@ input::-webkit-calendar-picker-indicator {
     font-weight:500;
     text-align: center;
 }
+.switch {
+    content-visibility: auto;
+    position: relative;
+    display: inline-block;
+    width: 30px;
+    height: 17px;
+  }
+  
+  /* Hide default HTML checkbox */
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  /* The slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 13px;
+    width: 13px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  hr.edititemhr{
+      border: 1px solid darkslategrey;
+  }
+  
+  input:checked + .slider {
+    background-color: #2196F3;
+  }
+  
+  input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+  }
+  
+  input:checked + .slider:before {
+    -webkit-transform: translateX(13px);
+    -ms-transform: translateX(13px);
+    transform: translateX(13px);
+  }
+  
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 17px;
+  }
+  
+  .slider.round:before {
+    border-radius: 50%;
+  }

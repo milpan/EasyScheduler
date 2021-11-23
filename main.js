@@ -13,8 +13,6 @@ var Weekdays = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
 var countTasks = 0;
 var editTaskId = 0;
 var editTaskDate = 0;
-//Define some draggable Tasks (these will later be populated by a MYSQL Call)
-
 //Function that Draws the Table depending on n_days
 function drawTable(n_days){
     var scheduler = document.getElementById("scheduler");
@@ -38,7 +36,6 @@ function drawTable(n_days){
     //After rendering the table start the button listener
     init_button_listener();
 }
-
 //Using the currentdate time obtain an array of ExampleTasks
 function obtainTasks(currentDate, number_days){
 /*
@@ -57,7 +54,6 @@ xmlhttp.onreadystatechange = function(){
         return ExampleTasks;
     }};
 }
-
 //This function calls a PHP Script which obtains the Distinct Names from the SQL Database and
 //the draggable tasks defined in itembox.js
 function getNames(currentDate, ExampleTasks){
@@ -73,7 +69,6 @@ function getNames(currentDate, ExampleTasks){
             startRender(currentDate, ExampleTasks, DistinctNames);
         }};
 }
-
 //This function is responsible for obtaining the number of elements in the SQL array to allow for new ID's of draggables SPECIAL FUNC which runs the itembox draggable once its got counttasks.
 function getElements(){
     var xmlhttp = new XMLHttpRequest();
@@ -87,7 +82,6 @@ function getElements(){
         }
         };
 }
-
 //Function that populates the table with tasks once the inital render has been made
 function populate_table(Tasks, startDate){
 //Iterate over the length of the Tasks
@@ -105,7 +99,6 @@ for (var i=0; i<Tasks.length; i++){
         createCell(CelltoPopulate, Task);
     }}
 }
-
 //Function which assigns a task to a specific cell ID
 function createCell(cellID, Task){
 /*
@@ -277,11 +270,17 @@ function init_button_listener(){
 
 function showedititem(event){
 var edit = document.getElementById('edititem');
+var slider = document.getElementById('switchedit');
 if(edit.style.visibility=='hidden'){
     if(event.target.getAttribute('contenteditable') == null){
-        var currentDate = moment(date);
-        editTaskDate = currentDate.add(parseInt(event.target.parentElement.id.match(/\d+/g)[0]), 'days').format('DD-MM-YYYY');
+        slider.style.opacity = 1;
         edit.style.visibility = 'visible';
+        var currentDate = moment(date);
+        editTaskDate = currentDate.add(parseInt(event.target.parentElement.id.match(/\d+/g)[0]), 'days');
+        var dateforpicker = editTaskDate.format('YYYY-MM-DD');
+        editTaskDate = editTaskDate.format('DD-MM-YYYY');
+        var datepicker = document.getElementById('editdate');
+        datepicker.value = dateforpicker;
         var user = event.target.parentElement.getAttribute('username');
         editTaskId = event.target.id.match(/\d+/g)[0];
         var username = user.match(/[a-zA-Z]+/g).join(" ");
@@ -292,6 +291,9 @@ if(edit.style.visibility=='hidden'){
     }
 } else{
     edit.style.visibility = 'hidden';
+    slider.style.opacity = 0;
+    //Lets set the Slider to invisible while the browser sets the children view to invisible
+    
 }}
 
 //This function dynamically updates tasks where you can edit the text after changing focus
@@ -419,19 +421,24 @@ function onDragStart(event){
 function submitedit(){
     if(confirm("Are you sure you would like to save these changes?")){
         //Get the text and user text fields
-        var NewContent = `<i contenteditable="true" onblur="onBlur(event);" id="dragtext-${editTaskId}">`+document.getElementById('tasknameedit').value+"</i>";
+        //Check if the Editable Box is Chosen
+        var editable = document.getElementById('taskeditable').checked;
+        var newDate = moment(document.getElementById('editdate').value).format('DD-MM-YYYY');
+        console.log(newDate);
+        var NewContent = `<i contenteditable="${editable}" onblur="onBlur(event);" id="dragtext-${editTaskId}">`+document.getElementById('tasknameedit').value+"</i>";
         var Task = {
             id: editTaskId,
             name: NewContent,
-            date: editTaskDate,
+            date: newDate,
             assigned_to: document.getElementById('assignededit').value
         }
     //Find the relevant item and update the HTML so user dosen't have to refresh
     //
     saveTasktoSQL(Task);
     showedititem();
+
     history.go(0);
-    deleteTableEntries();
+    deleteTableEntries(1);
     start();
     }
 
