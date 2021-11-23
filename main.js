@@ -52,8 +52,6 @@ xmlhttp.send("q=" + currentDate.format("DD-MM-YYYY") + "&d=" + number_days);
 xmlhttp.onreadystatechange = function(){
     if (this.readyState == 4 && this.status == 200){
         //If the php call is succesfull then decode the Json of the Tasks
-        //console.log(this.responseText);
-        //document.write(this.responseText);
         ExampleTasks = JSON.parse(this.responseText);
         getNames(currentDate, ExampleTasks);
         return ExampleTasks;
@@ -282,9 +280,7 @@ var edit = document.getElementById('edititem');
 if(edit.style.visibility=='hidden'){
     if(event.target.getAttribute('contenteditable') == null){
         var currentDate = moment(date);
-        console.log(currentDate);
         editTaskDate = currentDate.add(parseInt(event.target.parentElement.id.match(/\d+/g)[0]), 'days').format('DD-MM-YYYY');
-        console.log("clickedit:" + editTaskDate);
         edit.style.visibility = 'visible';
         var user = event.target.parentElement.getAttribute('username');
         editTaskId = event.target.id.match(/\d+/g)[0];
@@ -421,22 +417,24 @@ function onDragStart(event){
 
 //Handles when the user edits an item in editview
 function submitedit(){
-    console.log("submitedit:" + editTaskDate);
-    //Get the text and user text fields
-    var NewContent = `<i contenteditable="true" onblur="onBlur(event);" id="dragtext-${editTaskId}">`+document.getElementById('tasknameedit').value+"</i>";
-    var Task = {
-        id: editTaskId,
-        name: NewContent,
-        date: editTaskDate,
-        assigned_to: document.getElementById('assignededit').value
+    if(confirm("Are you sure you would like to save these changes?")){
+        //Get the text and user text fields
+        var NewContent = `<i contenteditable="true" onblur="onBlur(event);" id="dragtext-${editTaskId}">`+document.getElementById('tasknameedit').value+"</i>";
+        var Task = {
+            id: editTaskId,
+            name: NewContent,
+            date: editTaskDate,
+            assigned_to: document.getElementById('assignededit').value
+        }
+    //Find the relevant item and update the HTML so user dosen't have to refresh
+    //
+    saveTasktoSQL(Task);
+    showedititem();
+    history.go(0);
+    deleteTableEntries();
+    start();
     }
-//Find the relevant item and update the HTML so user dosen't have to refresh
-//
-saveTasktoSQL(Task);
-showedititem();
-history.go(0);
-deleteTableEntries();
-start();
+
 }
 
 
