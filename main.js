@@ -1,4 +1,3 @@
-
 moment.locale();
 //Need a function which counts the number of draggable items and one to populate them
 const init_date = moment();
@@ -9,8 +8,11 @@ var n_days = 7;
 var monthView = 0;
 var ExampleTasks =[];
 var DistinctNames =[];
+//Can change the names of the weekdays here!
 var Weekdays = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
 var countTasks = 0;
+var editTaskId = 0;
+var editTaskDate = 0;
 //Define some draggable Tasks (these will later be populated by a MYSQL Call)
 
 //Function that Draws the Table depending on n_days
@@ -83,7 +85,6 @@ function getElements(){
         if (this.readyState == 4 && this.status == 200){
             //If the php call is succesfull then decode the Json of the Tasks
             var countTasks = this.responseText; 
-
             getDraggables(countTasks);
         }
         };
@@ -147,6 +148,7 @@ else{
     div.setAttribute('className', 'item');
     div.setAttribute('id', "draggable-"+taskID);
     div.setAttribute('ondragstart', 'onDragStart(event)');
+    div.setAttribute('onclick', 'showedititem(event);');
     div.setAttribute('draggable', 'true');
     refdiv.appendChild(div);
     countTasks += 1;
@@ -194,7 +196,6 @@ function hasWhiteSpace(s) {
 }
 
 function saveTasktoSQL(TaskIn){
-    console.log(TaskIn);
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.open("POST", "savetosql.php", true);
     xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -204,8 +205,7 @@ function saveTasktoSQL(TaskIn){
             //If the php call is succesful then return a successful call
             return 1;
         }
-        };
-}
+        };}
 
 //Set the header of the Calendar to a certain date
 function setCalendarDate(DateIn){
@@ -271,11 +271,32 @@ function init_button_listener(){
     document.getElementById('nativedatepicker').addEventListener('input', (e)=>{
         monthView = 0;
         deleteTableEntries(1);
-        date = moment(e.target.value,'YYYY-MM-DD').startOf('week');
+        date = moment(e.target.value,'YYYY-MM-DD').startOf('isoweek');
         n_days = 7;
         start();
     });
 }
+
+function showedititem(event){
+var edit = document.getElementById('edititem');
+if(edit.style.visibility=='hidden'){
+    if(event.target.getAttribute('contenteditable') == null){
+        var currentDate = moment(date);
+        console.log(currentDate);
+        editTaskDate = currentDate.add(parseInt(event.target.parentElement.id.match(/\d+/g)[0]), 'days').format('DD-MM-YYYY');
+        console.log("clickedit:" + editTaskDate);
+        edit.style.visibility = 'visible';
+        var user = event.target.parentElement.getAttribute('username');
+        editTaskId = event.target.id.match(/\d+/g)[0];
+        var username = user.match(/[a-zA-Z]+/g).join(" ");
+        //Set the Text Fields to the Correct Details
+        document.getElementById('tasknameedit').value = event.target.children[0].innerHTML;
+        document.getElementById('assignededit').value = username;
+        dragElement(document.getElementById("edititem"));
+    }
+} else{
+    edit.style.visibility = 'hidden';
+}}
 
 //This function dynamically updates tasks where you can edit the text after changing focus
 function onBlur(event){
@@ -353,9 +374,8 @@ function onDrop(event){
     //Put our draggable div into the dropzone
     dropzone.appendChild(draggableElement);
     getElements();
-    } }
+    }}
     if(dropzone.className == "dropzone"){
-        console.log("In The dropzone");
         dropzone.appendChild(draggableElement);
     }
     //Reset our data Object
@@ -370,7 +390,6 @@ function onDropDelete(event){
     .dataTransfer
     .getData('text');
     var newid = id.match(/\d+/g)[0];
-    console.log("DELETE NUMERO" + newid);
     //Select our dragable element with the ID
     const draggableElement = document.getElementById(id);
     //Confirm the user wants to delete the item from the Scheduler
@@ -384,8 +403,7 @@ function onDropDelete(event){
             if (this.readyState == 4 && this.status == 200){
                 draggableElement.remove();
             }
-            };
-    }
+            };}
     //Reset our data Object
     event
     .dataTransfer.clearData();
@@ -399,6 +417,26 @@ function onDragStart(event){
     //Also set the background colour of the dragged item
     //and the text to black
     event.currentTarget.style.backgroundColor = '#5E35B1';
+}
+
+//Handles when the user edits an item in editview
+function submitedit(){
+    console.log("submitedit:" + editTaskDate);
+    //Get the text and user text fields
+    var NewContent = `<i contenteditable="true" onblur="onBlur(event);" id="dragtext-${editTaskId}">`+document.getElementById('tasknameedit').value+"</i>";
+    var Task = {
+        id: editTaskId,
+        name: NewContent,
+        date: editTaskDate,
+        assigned_to: document.getElementById('assignededit').value
+    }
+//Find the relevant item and update the HTML so user dosen't have to refresh
+//
+saveTasktoSQL(Task);
+showedititem();
+history.go(0);
+deleteTableEntries();
+start();
 }
 
 
@@ -438,8 +476,50 @@ function startRender(date, ExampleTasks, NamesIn){
     render_Table(NamesIn);
     populate_table(ExampleTasks, date);
     //mobileTooltip();
-    start_resize_grid();
+    start_resize_grid();  
 }
+
+//Code to allow the moving around of the Edit Window
+function dragElement(elmnt) {
+    var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+    if (document.getElementById(elmnt.id + "header")) {
+      // if present, the header is where you move the DIV from:
+      document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+    } else {
+      // otherwise, move the DIV from anywhere inside the DIV:
+      elmnt.onmousedown = dragMouseDown;
+    }
+  
+    function dragMouseDown(e) {
+      e = e || window.event;
+      e.preventDefault();
+      // get the mouse cursor position at startup:
+      pos3 = e.clientX;
+      pos4 = e.clientY;
+      document.onmouseup = closeDragElement;
+      // call a function whenever the cursor moves:
+      document.onmousemove = elementDrag;
+    }
+  
+    function elementDrag(e) {
+      e = e || window.event;
+      e.preventDefault();
+      // calculate the new cursor position:
+      pos1 = pos3 - e.clientX;
+      pos2 = pos4 - e.clientY;
+      pos3 = e.clientX;
+      pos4 = e.clientY;
+      // set the element's new position:
+      elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+      elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+    }
+  
+    function closeDragElement() {
+      // stop moving when mouse button is released:
+      document.onmouseup = null;
+      document.onmousemove = null;
+    }
+  }
 
 //----Main Decleration----//
 var countTasks = getElements();
@@ -448,5 +528,4 @@ if(n_days == "30" || n_days == "31"){
     monthView = 1;
 }
 drawTable(n_days);
-
 start();

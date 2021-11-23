@@ -106,7 +106,7 @@ to   { opacity: 1}
     background-color: inherit;
     color: white;
 }
-.tooltip{
+.tooltiptext{
     font-size: 7pt;
     width: 100%;
     justify-content: center;
@@ -115,7 +115,6 @@ to   { opacity: 1}
     position: fixed;
     bottom: 0;
 }
-
 @media screen and (max-width: 425px) {
     .tooltip {
     margin: auto;
@@ -124,10 +123,9 @@ to   { opacity: 1}
     left: -10%;
     position: absolute;
     display: flex;
-      justify-content: center;
+    justify-content: center;
     flex-wrap: wrap;
-  }
-}
+  }}
 .name{
     color: white;
     background: inherit;
@@ -138,6 +136,7 @@ to   { opacity: 1}
     color: white;
     white-space: nowrap;
     width: 30%;
+	height:fit-content !important;
     display: flex;
     overflow:visible;
     text-overflow: ellipsis;
@@ -180,7 +179,7 @@ to   { opacity: 1}
         #20262D 10px,
         #4a00e0 20px
       );
-      width:100%;
+    width:100%;
     color: white;
     height: inherit;
     white-space: nowrap;
@@ -198,59 +197,148 @@ to   { opacity: 1}
     padding: 10px;
 }
 .empty{
-height: 100%;
-background: inherit;
-display: flex !important;
+    height: 100%;
+    background: inherit;
+    display: flex !important;
 }
 .empty:hover{
-filter: brightness(95%);
-background-color: #20262D;
-height: 100%;
+    filter: brightness(95%);
+    background-color: #20262D;
+    height: 100%;
 }
 .dateheader{
-width: 100%;
-border-radius: 10px 10px 0px 0px;
-vertical-align: center;
-padding-top: 5px;
-display: flex;
-justify-content: space-between;
-padding-bottom: 5px;
-color: white;
-background: #6200EE;
-text-shadow: 0 0.1rem 1rem rgb(0,0,0);
-align-content: center;
-justify-content: center;
-text-align: center;
+    width: 100%;
+    border-radius: 10px 10px 0px 0px;
+    vertical-align: center;
+    padding-top: 5px;
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 5px;
+    color: white;
+    background: #6200EE;
+    text-shadow: 0 0.1rem 1rem rgb(0,0,0);
+    align-content: center;
+    justify-content: center;
+    text-align: center;
+}
+.tooltipbuttons{
+    vertical-align: end;
+    align-content: end;
 }
 .item span{
     display: none;
     overflow: visible;
     vertical-align: top !important;
-    background: #3700B3;
-    padding: 40px;
+    background: #3E3D40;
     position: absolute;
-    top: 30px;
-    width: fit-content;
+    margin-left: 10px;
+    animation: fadein 0.5s;
+    padding-right: 0px;
+    margin-top: 0px;
+    width: 300px;
+    justify-content: start;
     height: fit-content;
     color: white;
     text-align: left;
-    border-radius: 5px;
+    border-radius: 7px;
     box-shadow: 0 0.2rem 1rem rgba(0,0,0,0.4) ;
 }
 .item span h1{
-    display: inline;
+    font-size:large;
+    display:block;
+    width: 100%;
+    height:max-content;
+    left:0px !important;
+    padding-bottom: 10px;
     top: 0px !important;
     vertical-align: top !important;
-    background-color: inherit;
+    background-color: #6200EE;
     color: inherit;
 }
 .item span p{
+    margin-left: 10px;
     vertical-align: top !important;
     background-color: inherit;
     color: inherit;
 }
+.closebutton *{
+    text-align: right !important;
+    background-color: inherit;
+}
+.closebutton i{
+    color: red;
+    cursor:pointer;
+}
+.closebutton:hover i{
+    color:darkred !important;
+}
+.closebutton{
+    background-color: #1E1E1E;
+    border-radius: 5px 0 0 0;
+    cursor:grab;
+    text-align: right !important;
+}
 .item:hover span{
     display: block;
+}
+.edititem form input{
+    border: none;
+    margin-left: 3px;
+    color:white;
+    opacity: 1;
+    width: 95%;
+    background-color: #1E1E1E;
+    border-radius: 5px;
+    cursor: text;
+}
+.edititem form textarea{
+    border: none;
+    border-radius: 3px;
+    color:white;
+    resize: vertical;
+    background-color: #1E1E1E;
+    margin-left: 5px;
+    width:95%;
+}
+.edititem form button{
+    left: 200px;
+    width: max-content;
+    justify-content: right;
+}
+.edititem{
+    position: fixed;
+    visibility:hidden;
+    width:300px;
+    height: fit-content;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background-color: #3700B3;
+    border-radius: 10px;
+    box-shadow: 0 0.2rem 1rem rgba(0,0,0,0.4) ;
+}
+.edititem form{
+    padding-top: 10px;
+    margin-top: 10px;
+    display: inline-block;
+    bottom: 0;
+    color: white;
+    width: 100%;
+    height: max-content;
+
+}
+.edititem form button{
+    background-color: #6200EE;
+    border-radius: 5px;
+    align-self: flex-end;
+    color:white;
+}
+.edititem h1{
+    margin-left: 10px;
+    background-color:#3700B3;
+    color: white;
 }
 .loader {
     border: 6px solid #f3f3f3; /* Light grey */
@@ -272,12 +360,12 @@ text-align: center;
     background-color: inherit;
 }
 input {
-position: absolute;
-opacity: 0;
-width: 180px;
-height: 30px;
-overflow: hidden;
-cursor: pointer;
+    position: absolute;
+    opacity: 0;
+    width: 180px;
+    height: 30px;
+    overflow: hidden;
+    cursor: pointer;
 }
 input::-webkit-calendar-picker-indicator {
     position: absolute;
@@ -308,10 +396,10 @@ input::-webkit-calendar-picker-indicator {
 }
 .myView th{
     overflow:hidden;
-background: #121212;
-color: white;
-font-weight: 500;
-border-left: 1px solid #515151;
+    background: #121212;
+    color: white;
+    font-weight: 500;
+    border-left: 1px solid #515151;
 }
 .myView td{
     overflow:visible;

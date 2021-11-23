@@ -10,7 +10,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 <script src="https://momentjs.com/downloads/moment.js"></script>
@@ -30,7 +29,30 @@
     <script type="text/javascript" src="./tools/tabledesign.js"></script>
     <script src="main.js"></script>
 
-    <div class="tooltip">Example made by Matthew Bromley (milpan)</div>
+    <div class="tooltiptext">Example made by Matthew Bromley (milpan)</div>
+    <div id="edititem" class="edititem">
+        <div id="edititemheader" class="closebutton">
+            <i class="fas fa-times-circle closeedit" onclick="showedititem(event);"></i>
+        </div>
+        <h1>Edit Task</h1>
+
+        
+        <form>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                </div>
+                <input type="text" id="tasknameedit" class="form-control" placeholder="Task Name" aria-label="Task Name" aria-describedby="basic-addon1">
+                <br>
+                <br>
+                    <textarea class="form-control" id="taskdescedit" rows="3"></textarea>
+                <br>
+                <input type="text" class="form-control" id="assignededit" placeholder="Assigned To" aria-label="Assigned To" aria-describedby="basic-addon1">
+                <br>
+                <br>
+                <button type="submit" class="btn btn-primary" onclick="submitedit();">Update</button>
+              </div>
+          </form>
+    </div>
 </body>
 
 </html>
