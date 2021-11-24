@@ -27,7 +27,6 @@ CREATE TABLE `example` (
   `name` varchar(300) DEFAULT NULL,
   `assigned_to` varchar(50) DEFAULT NULL,
   `date` date DEFAULT NULL,
-  `description` varchar(500) DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2002 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -41,4 +40,4 @@ CREATE TABLE `example` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-11-24 14:40:31
+-- Dump completed on 2021-11-22 13:02:46

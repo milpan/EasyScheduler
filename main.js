@@ -427,6 +427,13 @@ function onDropDelete(event){
     .dataTransfer.clearData();
 }
 
+//THis function is responsible for injecting the HTML source for the popup window
+function InjectPopup(){
+var htmltoinject = '<div id="edititem" class="edititem"><div id="edititemheader" class="closebutton"><i class="fas fa-times-circle closeedit" onclick="showedititem(event);"></i></div><h1>Edit Task</h1><form><div class="input-group mb-3"><div class="input-group-prepend"></div><hr class="edititemhr"><input type="text" id="tasknameedit" class="form-control" placeholder="Task Name" aria-label="Task Name" aria-describedby="basic-addon1"><br><br><hr class="edititemhr"><textarea class="form-control" id="taskdescedit" rows="3"></textarea><br><input type="text" class="form-control" id="assignededit" placeholder="Assigned To" aria-label="Assigned To" aria-describedby="basic-addon1"><br><br><div class="editdatepickerdiv"><input type="date" id="editdate"></div><br><br><hr class="edititemhr"><label>Editable Task?</label><label id="switchedit" class="switch"><input id="taskeditable" type="checkbox"><span id="taskeditableround" class="slider round"></span></label><br><br><button type="button" class="btn btn-primary" onclick="submitedit();">Update</button></div></form></div>';
+var currentHTML = document.body.innerHTML;
+document.body.innerHTML = currentHTML + htmltoinject;
+}
+
 //Functions to handle the dragging and dropping of items into the View
 function onDragStart(event){
     event
@@ -454,10 +461,10 @@ function submitedit(){
             assigned_to: document.getElementById('assignededit').value
         }
     //Find the relevant item and update the HTML so user dosen't have to refresh
-    //
     saveTasktoSQL(Task);
-    //showedititem();
-
+    showedititem();
+    deleteTableEntries(1);
+    start();
     }
 
 }
@@ -489,6 +496,7 @@ function onDragOver(event){
 
 //Main function to start the scheduler
 function start(){
+    InjectPopup();
     var ExampleTasks = obtainTasks(date,n_days);
 }
 
