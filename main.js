@@ -269,6 +269,11 @@ function init_button_listener(){
 }
 
 function showedititem(event){
+if(deviceType()=="mobile" || deviceType()=="tablet"){
+        var itemview = document.getElementById("edititem");
+        itemview.style.top = 0;
+        itemview.style.left = 0;
+}
 var edit = document.getElementById('edititem');
 var slider = document.getElementById('switchedit');
 if(edit.style.visibility=='hidden'){
@@ -424,7 +429,6 @@ function submitedit(){
         //Check if the Editable Box is Chosen
         var editable = document.getElementById('taskeditable').checked;
         var newDate = moment(document.getElementById('editdate').value).format('DD-MM-YYYY');
-        console.log(newDate);
         var NewContent = `<i contenteditable="${editable}" onblur="onBlur(event);" id="dragtext-${editTaskId}">`+document.getElementById('tasknameedit').value+"</i>";
         var Task = {
             id: editTaskId,
