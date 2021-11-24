@@ -187,14 +187,15 @@ function hasWhiteSpace(s) {
 }
 
 function saveTasktoSQL(TaskIn){
+    console.log(TaskIn);
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.open("POST", "savetosql.php", true);
     xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xmlhttp.send("q=" + TaskIn["date"] + "&id=" + TaskIn["id"] + "&u=" + TaskIn["assigned_to"] + "&tn=" + TaskIn["name"]);
+    xmlhttp.send("q=" + TaskIn["date"] + "&id=" + TaskIn["id"] + "&u=" + TaskIn["assigned_to"] + "&tn=" + TaskIn["name"] + "&desc=" + TaskIn["description"]);
     xmlhttp.onreadystatechange = function(){
         if (this.readyState == 4 && this.status == 200){
             //If the php call is succesful then return a successful call
-            return 1;
+            
         }
         };}
 
@@ -288,18 +289,17 @@ if(edit.style.visibility=='hidden'){
         datepicker.value = dateforpicker;
         var user = event.target.parentElement.getAttribute('username');
         editTaskId = event.target.id.match(/\d+/g)[0];
+        console.log(editTaskId);
+        getDescription(editTaskId);
         var username = user.match(/[a-zA-Z]+/g).join(" ");
         //Set the Text Fields to the Correct Details
         document.getElementById('tasknameedit').value = event.target.children[0].innerHTML;
         document.getElementById('assignededit').value = username;
         dragElement(document.getElementById("edititem"));
-    }
-} else{
+    }} else{
     edit.style.visibility = 'hidden';
     slider.style.opacity = 0;
-    //Lets set the Slider to invisible while the browser sets the children view to invisible
-    
-}}
+    }}
 
 //This function dynamically updates tasks where you can edit the text after changing focus
 function onBlur(event){
@@ -321,6 +321,7 @@ function save_class(RefClass, startDate, element){
     var taskDate = inStartDate.add(id, 'days').format('DD-MM-YYYY');
     Task = {
     id: itemID,
+    description: "",
     name: texttoPopulate,
     assigned_to: user,
     date: taskDate 
@@ -347,6 +348,20 @@ function resetSicknessDrag(){
     var injectionHTML = '<div id="addsick" title="Add Sickness" class="delete" draggable="true" ondragstart="onDragStart(event);"><i id="addsick" class="fas fa-disease ill"></i><i>Add Sickness</i></div>';
     var existingHTML = toolbar.innerHTML;
     toolbar.innerHTML = injectionHTML + existingHTML;
+}
+/* ----- Two functions that gets the description when user is in EditView ----- */
+
+function getDescription(TaskId){
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("POST", "getDesc.php", true);
+    xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xmlhttp.send("i=" + TaskId);
+    xmlhttp.onreadystatechange = function(){
+        if (this.readyState == 4 && this.status == 200){
+            //If the php call is succesful then return a successful call
+            document.getElementById('taskdescedit').value = this.responseText;
+        }
+        };
 }
 
 //Function that handles the drop event of items onto the calendar
@@ -428,22 +443,21 @@ function submitedit(){
         //Get the text and user text fields
         //Check if the Editable Box is Chosen
         var editable = document.getElementById('taskeditable').checked;
+        var indescription = document.getElementById('taskdescedit').value;
         var newDate = moment(document.getElementById('editdate').value).format('DD-MM-YYYY');
         var NewContent = `<i contenteditable="${editable}" onblur="onBlur(event);" id="dragtext-${editTaskId}">`+document.getElementById('tasknameedit').value+"</i>";
         var Task = {
             id: editTaskId,
             name: NewContent,
             date: newDate,
+            description: indescription,
             assigned_to: document.getElementById('assignededit').value
         }
     //Find the relevant item and update the HTML so user dosen't have to refresh
     //
     saveTasktoSQL(Task);
-    showedititem();
+    //showedititem();
 
-    history.go(0);
-    deleteTableEntries(1);
-    start();
     }
 
 }
