@@ -4,15 +4,12 @@ require "php_config.php";
 global $outArray;
 $outArray = array();
 
-
-
-
-function obtainTasks($link){
+function obtainTasks($link, $companyID){
     global $outArray;
     //Subtract 1 from the call so we dont get next Mondays Tasks
     //$inDate -> Starting date of the week tasks are to be rendered
     //$n_days -> Number of days from the starting date of tasks to recieve  
-    $sql = "SELECT * FROM example WHERE assigned_to = ''";
+    $sql = "SELECT * FROM example WHERE assigned_to = '' AND CompanyID = '{$companyID}'";
     if($result = $link->query($sql)){
 		while($row = $result->fetch_assoc()){
     $outArray[] = $row;	
@@ -24,5 +21,5 @@ function obtainTasks($link){
 }
 
 //Obtain the requests from Javascript
-obtainTasks($link);
+obtainTasks($link, $companyID);
 ?>

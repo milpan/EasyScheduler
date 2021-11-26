@@ -8,6 +8,14 @@ var n_days = 7;
 var monthView = 0;
 var ExampleTasks =[];
 var DistinctNames =[];
+
+// --- Main Javascript Configuration --- //
+//Allows the User to Edit Information Directly from the Timeline View
+var editablefromTimeline = true;
+//Allows the User to delete Tasks from the Scheduler
+var allowDelete = true;
+
+
 //Can change the names of the weekdays here!
 var Weekdays = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
 var countTasks = 0;
@@ -45,6 +53,7 @@ number_days -> number of days of which to obtain the tasks
 var xmlhttp = new XMLHttpRequest();
 xmlhttp.open("POST", "mysql_support.php", true);
 xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+console.log(currentDate);
 xmlhttp.send("q=" + currentDate.format("DD-MM-YYYY") + "&d=" + number_days);
 xmlhttp.onreadystatechange = function(){
     if (this.readyState == 4 && this.status == 200){
@@ -69,6 +78,17 @@ function getNames(currentDate, ExampleTasks){
             startRender(currentDate, ExampleTasks, DistinctNames);
         }};
 }
+//Function to show and hide the EditView Loader
+function showhideloader(flag=0){
+    if(flag == 0){
+        //Show the Loader
+        var loaderview = document.getElementById('loadingcircle').style.visibility = "visible";
+        
+    }else{
+        var loaderview = document.getElementById('loadingcircle').style.visibility = "hidden";
+    }
+}
+
 //This function is responsible for obtaining the number of elements in the SQL array to allow for new ID's of draggables SPECIAL FUNC which runs the itembox draggable once its got counttasks.
 function getElements(){
     var xmlhttp = new XMLHttpRequest();
@@ -89,7 +109,7 @@ startDate = moment(startDate);
 for (var i=0; i<Tasks.length; i++){
     var Task = Tasks[i];
     var Name = Task['assigned_to'];
-    var TaskDate = moment(Task['date'], 'DD-MM-YYYY');
+    var TaskDate = moment(Task['start'], 'DD-MM-YYYY');
     var DaysDiff = TaskDate.diff(startDate, 'days');
     //Check the date is within the range of the scheduler
     if (DaysDiff <= n_days && DaysDiff >= 0){
@@ -187,11 +207,12 @@ function hasWhiteSpace(s) {
 }
 
 function saveTasktoSQL(TaskIn){
-    console.log(TaskIn);
+    console.log("Into the Save Task Function" + TaskIn);
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.open("POST", "savetosql.php", true);
     xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xmlhttp.send("q=" + TaskIn["date"] + "&id=" + TaskIn["id"] + "&u=" + TaskIn["assigned_to"] + "&tn=" + TaskIn["name"] + "&desc=" + TaskIn["description"]);
+
+    xmlhttp.send("q=" + TaskIn["start"] +"&e=" + TaskIn["end"] + "&id=" + TaskIn["id"] + "&u=" + TaskIn["assigned_to"] + "&tn=" + TaskIn["name"] + "&desc=" + TaskIn["description"]);
     xmlhttp.onreadystatechange = function(){
         if (this.readyState == 4 && this.status == 200){
             //If the php call is succesful then return a successful call
@@ -261,44 +282,55 @@ function init_button_listener(){
         start();
     });
     document.getElementById('nativedatepicker').addEventListener('input', (e)=>{
-        monthView = 0;
-        deleteTableEntries(1);
-        date = moment(e.target.value,'YYYY-MM-DD').startOf('isoweek');
-        n_days = 7;
-        start();
+        if(e.target.value != null || ""){
+            monthView = 0;
+            deleteTableEntries(1);
+            date = moment(e.target.value,'YYYY-MM-DD').startOf('isoweek');
+            n_days = 7;
+            start();
+        }
     });
+}
+
+//This function gets specific task by TaskID saving having to parse information on the fly
+function getSpecificTask(TaskID){
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("POST", "getspecifics.php", true);
+    xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xmlhttp.send("q=" + TaskID);
+    xmlhttp.onreadystatechange = function(){
+        if (this.readyState == 4 && this.status == 200){
+            //If the php call is succesful then return a successful call
+            //Set the Task Description
+            var RetrievedTask = JSON.parse(this.responseText);
+            console.log(this.responseText);
+            editTaskDate = moment(RetrievedTask["start"]).format('DD-MM-YYYY');
+            document.getElementById('taskdescedit').value = RetrievedTask["description"];
+            document.getElementById('editdate').value = moment(RetrievedTask["start"], "DD-MM-YYYY").format('YYYY-MM-DD');
+            document.getElementById('editenddate').value = moment(RetrievedTask["end"], "DD-MM-YYYY").format('YYYY-MM-DD');
+            document.getElementById('tasknameedit').value = RetrievedTask["name"];
+            document.getElementById('assignededit').value = RetrievedTask["assigned_to"];
+            showhideloader(1);
+        }};
 }
 
 function showedititem(event){
 if(deviceType()=="mobile" || deviceType()=="tablet"){
-        var itemview = document.getElementById("edititem");
-        itemview.style.top = 0;
-        itemview.style.left = 0;
-}
+    var itemview = document.getElementById("edititem");
+    itemview.style.top = 0;
+    itemview.style.left = 0;}
 var edit = document.getElementById('edititem');
-var slider = document.getElementById('switchedit');
 if(edit.style.visibility=='hidden'){
+    //Check that were clicking on a task and not some label contained within the item
     if(event.target.getAttribute('contenteditable') == null){
-        slider.style.opacity = 1;
-        edit.style.visibility = 'visible';
-        var currentDate = moment(date);
-        editTaskDate = currentDate.add(parseInt(event.target.parentElement.id.match(/\d+/g)[0]), 'days');
-        var dateforpicker = editTaskDate.format('YYYY-MM-DD');
-        editTaskDate = editTaskDate.format('DD-MM-YYYY');
-        var datepicker = document.getElementById('editdate');
-        datepicker.value = dateforpicker;
-        var user = event.target.parentElement.getAttribute('username');
-        editTaskId = event.target.id.match(/\d+/g)[0];
-        console.log(editTaskId);
-        getDescription(editTaskId);
-        var username = user.match(/[a-zA-Z]+/g).join(" ");
-        //Set the Text Fields to the Correct Details
-        document.getElementById('tasknameedit').value = event.target.children[0].innerHTML;
-        document.getElementById('assignededit').value = username;
-        dragElement(document.getElementById("edititem"));
-    }} else{
+    edit.style.visibility = 'visible';
+    showhideloader(0);
+    var user = event.target.parentElement.getAttribute('username');
+    editTaskId = event.target.id.match(/\d+/g)[0];
+    getSpecificTask(editTaskId);
+    dragElement(document.getElementById("edititem"));
+    }}else{
     edit.style.visibility = 'hidden';
-    slider.style.opacity = 0;
     }}
 
 //This function dynamically updates tasks where you can edit the text after changing focus
@@ -308,7 +340,7 @@ var targetparent = target.parentElement;
 //Check that the target parent parent is a EMPTY and if so lets update the record on the Database
 var targettarget = targetparent.parentElement;
 if(targettarget.getAttribute("class")=="empty"){
-save_class(targettarget.getAttribute('username'),date, targetparent);
+save_class(targettarget.getAttribute('username'), date, targetparent);
 }}
 
 //Function which pushes tasks to the Array once they have been dragged
@@ -318,13 +350,15 @@ function save_class(RefClass, startDate, element){
     var user = RefClass.match(/[a-zA-Z]+/g).join(" ");
     var texttoPopulate = element.innerHTML;
     var itemID = element.id.match(/\d+/g)[0];
-    var taskDate = inStartDate.add(id, 'days').format('DD-MM-YYYY');
+    var dummyDate = inStartDate.add(id, 'days');
+    var taskDate = dummyDate.format('DD-MM-YYYY');
+    var dummyEnd = dummyDate.add(1, 'days').format('DD-MM-YYYY');
     Task = {
     id: itemID,
-    description: "",
     name: texttoPopulate,
     assigned_to: user,
-    date: taskDate 
+    start: taskDate,
+    end: dummyEnd
     };
     saveTasktoSQL(Task);
 }
@@ -349,20 +383,7 @@ function resetSicknessDrag(){
     var existingHTML = toolbar.innerHTML;
     toolbar.innerHTML = injectionHTML + existingHTML;
 }
-/* ----- Two functions that gets the description when user is in EditView ----- */
 
-function getDescription(TaskId){
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.open("POST", "getDesc.php", true);
-    xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xmlhttp.send("i=" + TaskId);
-    xmlhttp.onreadystatechange = function(){
-        if (this.readyState == 4 && this.status == 200){
-            //If the php call is succesful then return a successful call
-            document.getElementById('taskdescedit').value = this.responseText;
-        }
-        };
-}
 
 //Function that handles the drop event of items onto the calendar
 function onDrop(event){
@@ -429,7 +450,7 @@ function onDropDelete(event){
 
 //THis function is responsible for injecting the HTML source for the popup window
 function InjectPopup(){
-var htmltoinject = '<div id="edititem" class="edititem"><div id="edititemheader" class="closebutton"><i class="fas fa-times-circle closeedit" onclick="showedititem(event);"></i></div><h1>Edit Task</h1><form><div class="input-group mb-3"><div class="input-group-prepend"></div><hr class="edititemhr"><input type="text" id="tasknameedit" class="form-control" placeholder="Task Name" aria-label="Task Name" aria-describedby="basic-addon1"><br><br><hr class="edititemhr"><textarea class="form-control" id="taskdescedit" rows="3"></textarea><br><input type="text" class="form-control" id="assignededit" placeholder="Assigned To" aria-label="Assigned To" aria-describedby="basic-addon1"><br><br><div class="editdatepickerdiv"><input type="date" id="editdate"></div><br><br><hr class="edititemhr"><label>Editable Task?</label><label id="switchedit" class="switch"><input id="taskeditable" type="checkbox"><span id="taskeditableround" class="slider round"></span></label><br><br><button type="button" class="btn btn-primary" onclick="submitedit();">Update</button></div></form></div>';
+var htmltoinject = '';
 var currentHTML = document.body.innerHTML;
 document.body.innerHTML = currentHTML + htmltoinject;
 }
@@ -443,20 +464,20 @@ function onDragStart(event){
     //and the text to black
     event.currentTarget.style.backgroundColor = '#5E35B1';
 }
-
 //Handles when the user edits an item in editview
 function submitedit(){
     if(confirm("Are you sure you would like to save these changes?")){
         //Get the text and user text fields
         //Check if the Editable Box is Chosen
-        var editable = document.getElementById('taskeditable').checked;
         var indescription = document.getElementById('taskdescedit').value;
+        var endDate = moment(document.getElementById('editenddate').value).format('DD-MM-YYYY');
         var newDate = moment(document.getElementById('editdate').value).format('DD-MM-YYYY');
-        var NewContent = `<i contenteditable="${editable}" onblur="onBlur(event);" id="dragtext-${editTaskId}">`+document.getElementById('tasknameedit').value+"</i>";
+        var NewContent = document.getElementById('tasknameedit').value;
         var Task = {
             id: editTaskId,
             name: NewContent,
-            date: newDate,
+            start: newDate,
+            end: endDate,
             description: indescription,
             assigned_to: document.getElementById('assignededit').value
         }
@@ -466,9 +487,7 @@ function submitedit(){
     deleteTableEntries(1);
     start();
     }
-
 }
-
 
 //Function which handles the deleting of items once myView is changed
 function deleteTableEntries($condition = 0){
@@ -496,7 +515,6 @@ function onDragOver(event){
 
 //Main function to start the scheduler
 function start(){
-    InjectPopup();
     var ExampleTasks = obtainTasks(date,n_days);
 }
 
@@ -506,7 +524,6 @@ function startRender(date, ExampleTasks, NamesIn){
     setCalendarDate(date);
     render_Table(NamesIn);
     populate_table(ExampleTasks, date);
-    //mobileTooltip();
     start_resize_grid();  
 }
 
@@ -520,7 +537,6 @@ function dragElement(elmnt) {
       // otherwise, move the DIV from anywhere inside the DIV:
       elmnt.onmousedown = dragMouseDown;
     }
-  
     function dragMouseDown(e) {
       e = e || window.event;
       e.preventDefault();
@@ -531,7 +547,6 @@ function dragElement(elmnt) {
       // call a function whenever the cursor moves:
       document.onmousemove = elementDrag;
     }
-  
     function elementDrag(e) {
       e = e || window.event;
       e.preventDefault();
@@ -544,19 +559,18 @@ function dragElement(elmnt) {
       elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
       elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
     }
-  
     function closeDragElement() {
       // stop moving when mouse button is released:
       document.onmouseup = null;
       document.onmousemove = null;
     }
   }
-
-//----Main Decleration----//
+//----- Main Decleration -----//
 var countTasks = getElements();
 //Check if calendar is in month view if so activate the trigger on launch
 if(n_days == "30" || n_days == "31"){
     monthView = 1;
 }
+InjectPopup();
 drawTable(n_days);
 start();

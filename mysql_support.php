@@ -6,19 +6,21 @@ $n_days = $_POST["d"];
 global $outArray;
 $outArray = array();
 
-function obtainTasks($link, $inDate, $n_days){
+function obtainTasks($link, $inDate, $n_days, $companyID){
     global $outArray;
     $inDate = date('Y-m-d', strtotime($inDate));
     //Subtract 1 from the call so we dont get next Mondays Tasks
     $n_days = $n_days - 1;
     //$inDate -> Starting date of the week tasks are to be rendered
     //$n_days -> Number of days from the starting date of tasks to recieve
-    $endDate = date('Y-m-d', strtotime($inDate . "+ {$n_days} days"));   
-    $sql = "SELECT * FROM example WHERE (date BETWEEN '{$inDate}' AND '{$endDate}')";
+    $endDate = date('Y-m-d', strtotime($inDate . "+ {$n_days} days")); 
+
+    $sql = "SELECT * FROM example WHERE (start BETWEEN '{$inDate}' AND '{$endDate}') AND (CompanyID = {$companyID})";
     if($result = $link->query($sql)){
 		while($row = $result->fetch_assoc()){
     //Convert the Date to the Format used by JS
-    $row["date"] = date('d-m-Y', strtotime($row["date"]));
+    $row["start"] = date('d-m-Y', strtotime($row["start"]));
+    $row["end"] = date('d-m-Y', strtotime($row["end"]));
     $outArray[] = $row;
 		
 		
@@ -31,5 +33,5 @@ function obtainTasks($link, $inDate, $n_days){
 
 //Obtain the requests from Javascript
 
-obtainTasks($link, $inDate, $n_days);
+obtainTasks($link, $inDate, $n_days, $companyID);
 ?>
